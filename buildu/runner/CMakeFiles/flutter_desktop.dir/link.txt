@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\Flutter_Desktop.dir/objects.a
+C:\MinGW\bin\ar.exe cr CMakeFiles\Flutter_Desktop.dir/objects.a @CMakeFiles\Flutter_Desktop.dir\objects1.rsp
+C:\MinGW\bin\mingw32-g++.exe -g -mwindows -Wl,--whole-archive CMakeFiles\Flutter_Desktop.dir/objects.a -Wl,--no-whole-archive -o Flutter_Desktop.exe -Wl,--out-implib,libFlutter_Desktop.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\Flutter_Desktop.dir\linklibs.rsp
