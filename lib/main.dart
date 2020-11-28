@@ -1,35 +1,59 @@
 import 'package:faker/faker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/customer.dart';
+import 'package:flutter_desktop/login_screen.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:provider/provider.dart';
+import 'authentication_service.dart';
+import 'authentication_wrapper.dart';
 
-void main() {
+void main() async {
   //debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Flutter Desktop',
+    return MultiProvider(
+      providers: [
+        Provider<AuthenticationService>(
+          create: (_) => AuthenticationService(FirebaseAuth.instance),
+        ),
+        StreamProvider(
+          create: (context) =>
+              context.read<AuthenticationService>().authStateChanges,
+        ),
+      ],
+      child: MaterialApp(
+        title: 'KundenAppFlutter',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: DefaultTabController(
-          length: 3,
-          child: MyHomePage(title: 'KundenAppFlutter'),
-        ));
+        home: AuthenticationWrapper(),
+      ),
+    );
+
+    // return MaterialApp(
+    //     title: 'Flutter Desktop',
+    //     theme: ThemeData(
+    //       primarySwatch: Colors.blue,
+    //       visualDensity: VisualDensity.adaptivePlatformDensity,
+    //     ),
+    //     home: DefaultTabController(
+    //       length: 3,
+    //       child: MyHomePage(title: 'KundenAppFlutter'),
+    //     ));
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -55,32 +79,54 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        bottom: TabBar(
-          tabs: [
-            Tab(
-                text: "Kunden",
-                icon: Icon(IconData(0xf03e, fontFamily: 'MaterialIcons'))),
-            Tab(
-                text: "Rechnungen",
-                icon: Icon(IconData(0xe5b6, fontFamily: 'MaterialIcons'))),
-            Tab(text: "Artikel", icon: Icon(Icons.directions_bike)),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('KundenAppFlutter'),
+          bottom: TabBar(
+            tabs: [
+              Tab(
+                  text: "Kunden",
+                  icon: Icon(IconData(0xf03e, fontFamily: 'MaterialIcons'))),
+              Tab(
+                  text: "Rechnungen",
+                  icon: Icon(IconData(0xe5b6, fontFamily: 'MaterialIcons'))),
+              Tab(text: "Artikel", icon: Icon(Icons.directions_bike)),
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                context.read<AuthenticationService>().signOut();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginPage(),
+                    ));
+              },
+              child: Row(
+                children: [
+                  Icon(Icons.logout, size: 26.0, color: Colors.white),
+                  SizedBox(width: 3),
+                  Text('Logout', style: TextStyle(color: Colors.white)),
+                ],
+              ),
+            )
           ],
         ),
-      ),
-      body: TabBarView(
-        children: [
-          _createCustomerList(),
-          Icon(Icons.directions_bike),
-          Icon(Icons.directions_bike),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addCustomer,
-        tooltip: 'Kunde hinzufügen',
-        child: Icon(Icons.add),
+        body: TabBarView(
+          children: [
+            _createCustomerList(),
+            Icon(Icons.directions_bike),
+            Icon(Icons.directions_bike),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _addCustomer,
+          tooltip: 'Kunde hinzufügen',
+          child: Icon(Icons.add),
+        ),
       ),
     );
   }
