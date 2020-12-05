@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/main.dart';
+import 'main_screen.dart';
 import 'widget/bezierContainer.dart';
 import 'authentication_service.dart';
 import 'login_screen.dart';
@@ -106,7 +107,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     )));
               } else {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MyHomePage()));
+                    MaterialPageRoute(builder: (context) => MainPage()));
               }
             }),
       ),
@@ -218,3 +219,5 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 }
+
+class Mainpage {}

@@ -1,11 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/auth_helper.dart';
-import 'package:flutter_desktop/main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'Widget/bezierContainer.dart';
 import 'authentication_service.dart';
+import 'main_screen.dart';
 import 'signup_screen.dart';
 
 class LoginPage extends StatefulWidget {
@@ -120,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                     )));
               } else {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MyHomePage()));
+                    MaterialPageRoute(builder: (context) => MainPage()));
               }
             }),
       ),
@@ -179,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
-                  return MyHomePage();
+                  return MainPage();
                 },
               ),
             );
