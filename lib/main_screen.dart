@@ -14,11 +14,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final List<Customer> customers = <Customer>[];
-
   void _addCustomer() {
     var faker = new Faker();
     Customer newCustomer = new Customer(
+        null,
         faker.internet.userName(),
         faker.person.name(),
         "Muster Str. 12",
@@ -29,11 +28,7 @@ class _MainPageState extends State<MainPage> {
         faker.internet.email(),
         "www." + faker.internet.userName() + ".de");
 
-    setState(() {
-      customers.add(newCustomer);
-    });
-
-    DatabaseHelper.addCustomerData(newCustomer);
+    DatabaseHelper.addCustomer(newCustomer);
   }
 
   @override
@@ -505,28 +500,23 @@ class _MainPageState extends State<MainPage> {
                                     break;
                                   case 3:
                                     //Delete button
-                                    setState(() {
-                                      DatabaseHelper.deleteUser(customer);
-                                      Scaffold.of(context)
-                                          .showSnackBar(SnackBar(
-                                        backgroundColor: Colors.red,
-                                        duration: Duration(seconds: 1),
-                                        content: Text(
-                                            customer.name + " wurde gelöscht"),
-                                        action: SnackBarAction(
-                                          textColor: Colors.black87,
-                                          label: 'Rückgängig',
-                                          onPressed: () {
-                                            setState(() {
-                                              customers.insert(index, customer);
-                                            });
-                                          },
-                                        ),
-                                      ));
-                                    });
+                                    DatabaseHelper.deleteCustomer(customer);
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.red,
+                                      duration: Duration(seconds: 1),
+                                      content: Text(
+                                          customer.name + " wurde gelöscht"),
+                                      action: SnackBarAction(
+                                        textColor: Colors.black87,
+                                        label: 'Rückgängig',
+                                        onPressed: () {
+                                          DatabaseHelper.addCustomer(customer);
+                                        },
+                                      ),
+                                    ));
                                     break;
                                 }
-                                print("value: $value");
                               },
                               icon: Icon(Icons.more_vert),
                             ),
@@ -560,26 +550,21 @@ class _MainPageState extends State<MainPage> {
                             color: Colors.red,
                             icon: Icons.delete,
                             onTap: () {
-                              setState(
-                                () {
-                                  customers.remove(customer);
-                                  Scaffold.of(context).showSnackBar(SnackBar(
-                                    backgroundColor: Colors.red,
-                                    duration: Duration(seconds: 1),
-                                    content:
-                                        Text(customer.name + " wurde gelöscht"),
-                                    action: SnackBarAction(
-                                      textColor: Colors.black87,
-                                      label: 'Rückgängig',
-                                      onPressed: () {
-                                        setState(() {
-                                          customers.insert(index, customer);
-                                        });
-                                      },
-                                    ),
-                                  ));
-                                },
-                              );
+                              DatabaseHelper.deleteCustomer(customer);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: Colors.red,
+                                duration: Duration(seconds: 1),
+                                content:
+                                    Text(customer.name + " wurde gelöscht"),
+                                action: SnackBarAction(
+                                  textColor: Colors.black87,
+                                  label: 'Rückgängig',
+                                  onPressed: () {
+                                    DatabaseHelper.addCustomer(customer);
+                                  },
+                                ),
+                              ));
                             },
                           ),
                         ],
