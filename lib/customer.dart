@@ -41,43 +41,43 @@ class Customer {
     return obj;
   }
 
-  String get getId => id;
+  // String get getId => id;
 
-  set setId(String id) => this.id = id;
+  // set setId(String id) => this.id = id;
 
-  String get getName => name;
+  // String get getName => name;
 
-  set setName(String name) => this.name = name;
+  // set setName(String name) => this.name = name;
 
-  String get getContact => contact;
+  // String get getContact => contact;
 
-  set setContact(String contact) => this.contact = contact;
+  // set setContact(String contact) => this.contact = contact;
 
-  String get getStreet => street;
+  // String get getStreet => street;
 
-  set setStreet(String street) => this.street = street;
+  // set setStreet(String street) => this.street = street;
 
-  String get getZip => zip;
+  // String get getZip => zip;
 
-  set setZip(String zip) => this.zip = zip;
+  // set setZip(String zip) => this.zip = zip;
 
-  String get getLocation => location;
+  // String get getLocation => location;
 
-  set setLocation(String location) => this.location = location;
+  // set setLocation(String location) => this.location = location;
 
-  String get getPhone => phone;
+  // String get getPhone => phone;
 
-  set setPhone(String phone) => this.phone = phone;
+  // set setPhone(String phone) => this.phone = phone;
 
-  String get getFax => fax;
+  // String get getFax => fax;
 
-  set setFax(String fax) => this.fax = fax;
+  // set setFax(String fax) => this.fax = fax;
 
-  String get getEmail => email;
+  // String get getEmail => email;
 
-  set setEmail(String email) => this.email = email;
+  // set setEmail(String email) => this.email = email;
 
-  String get getWeb => web;
+  // String get getWeb => web;
 
-  set setWeb(String web) => this.web = web;
+  // set setWeb(String web) => this.web = web;
 }
