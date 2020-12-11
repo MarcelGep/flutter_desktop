@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_desktop/customer.dart';
 import 'package:flutter_desktop/database_helper.dart';
 import 'package:flutter_desktop/login_screen.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -501,20 +503,7 @@ class _MainPageState extends State<MainPage> {
                                   case 3:
                                     //Delete button
                                     DatabaseHelper.deleteCustomer(customer);
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      backgroundColor: Colors.red,
-                                      duration: Duration(seconds: 1),
-                                      content: Text(
-                                          customer.name + " wurde gelöscht"),
-                                      action: SnackBarAction(
-                                        textColor: Colors.black87,
-                                        label: 'Rückgängig',
-                                        onPressed: () {
-                                          DatabaseHelper.addCustomer(customer);
-                                        },
-                                      ),
-                                    ));
+                                    showFlushbar(context, customer);
                                     break;
                                 }
                               },
@@ -551,20 +540,7 @@ class _MainPageState extends State<MainPage> {
                             icon: Icons.delete,
                             onTap: () {
                               DatabaseHelper.deleteCustomer(customer);
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                backgroundColor: Colors.red,
-                                duration: Duration(seconds: 1),
-                                content:
-                                    Text(customer.name + " wurde gelöscht"),
-                                action: SnackBarAction(
-                                  textColor: Colors.black87,
-                                  label: 'Rückgängig',
-                                  onPressed: () {
-                                    DatabaseHelper.addCustomer(customer);
-                                  },
-                                ),
-                              ));
+                              showFlushbar(context, customer);
                             },
                           ),
                         ],
@@ -579,4 +555,61 @@ class _MainPageState extends State<MainPage> {
         //: Center(child: const Text('Keine Einträge')),
         );
   }
+
+  void showFlushbar(BuildContext context, Customer customer) {
+    int durationMs = 1500;
+    Flushbar<List<String>> flush;
+    flush = Flushbar<List<String>>(
+      showProgressIndicator: false,
+      animationDuration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: durationMs),
+      shouldIconPulse: false,
+      leftBarIndicatorColor: Colors.red,
+      messageText: Text(
+        "Kunde wurde gelöscht!",
+        style: TextStyle(color: Colors.red),
+      ),
+      icon: Icon(Icons.delete_outline, color: Colors.red),
+      mainButton: FlatButton(
+        child: Row(
+          children: [
+            Text(
+              "RÜCKGÄNGIG",
+              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(width: 8),
+            CircularPercentIndicator(
+              radius: 25.0,
+              animation: true,
+              animationDuration: durationMs,
+              lineWidth: 4.0,
+              percent: 1,
+              circularStrokeCap: CircularStrokeCap.round,
+              backgroundColor: Colors.grey[800],
+              progressColor: Colors.blue,
+            ),
+          ],
+        ),
+        onPressed: () {
+          DatabaseHelper.addCustomer(customer);
+          flush.dismiss();
+        },
+      ),
+    )..show(context);
+  }
+
+  // void showDeleteSnackBar(BuildContext context, Customer customer) {
+  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //     backgroundColor: Colors.red,
+  //     duration: Duration(seconds: 1),
+  //     content: Text(customer.name + " wurde gelöscht"),
+  //     action: SnackBarAction(
+  //       textColor: Colors.black87,
+  //       label: 'Rückgängig',
+  //       onPressed: () {
+  //         DatabaseHelper.addCustomer(customer);
+  //       },
+  //     ),
+  //   ));
+  // }
 }

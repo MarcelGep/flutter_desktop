@@ -38,6 +38,8 @@ dependencies:
   convex_bottom_bar: ^2.6.0
   device_info: ^1.0.0
   package_info: ^0.4.3+2
+  another_flushbar: ^1.10.5
+  percent_indicator: ^2.1.8
   
 dev_dependencies:
   flutter_test:
