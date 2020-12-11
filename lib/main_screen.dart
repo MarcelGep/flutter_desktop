@@ -9,6 +9,7 @@ import 'package:flutter_desktop/database_helper.dart';
 import 'package:flutter_desktop/login_screen.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:random_color/random_color.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -69,31 +70,6 @@ class _MainPageState extends State<MainPage> {
             Icon(Icons.settings),
           ],
         ),
-        // bottomNavigationBar: TabBar(
-        //   tabs: [
-        //     Tab(
-        //         text: "Kunden",
-        //         icon: Icon(IconData(0xf03e, fontFamily: 'MaterialIcons'))),
-        //     Tab(
-        //         text: "Rechnungen",
-        //         icon: Icon(IconData(0xe5b6, fontFamily: 'MaterialIcons'))),
-        //     Tab(text: "Artikel", icon: Icon(Icons.directions_bike)),
-        //   ],
-        // ),
-        // bottomNavigationBar: AnimatedBottomNavigationBar(
-        //   icons: [Icons.settings, Icons.bike_scooter, Icons.person],
-        //   activeIndex: bottomIndex,
-        //   gapLocation: GapLocation.end,
-        //   notchSmoothness: NotchSmoothness.defaultEdge,
-        //   // leftCornerRadius: 32,
-        //   // rightCornerRadius: 32,
-        //   backgroundColor: Colors.blue,
-        //   activeColor: Colors.white,
-        //   onTap: (index) => setState(() {
-        //     bottomIndex = index;
-        //   }),
-        // ),
-        // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         bottomNavigationBar: ConvexAppBar(
           style: TabStyle.react,
           height: 60,
@@ -108,9 +84,7 @@ class _MainPageState extends State<MainPage> {
             TabItem(icon: Icons.directions_bike, title: "Artikel"),
             TabItem(icon: Icons.settings, title: "Einstellungen"),
           ],
-          onTap: (int i) => print('click index=$i'),
         ),
-
         floatingActionButton: FloatingActionButton(
           onPressed: _addCustomer,
           tooltip: 'Kunde hinzufügen',
@@ -119,36 +93,6 @@ class _MainPageState extends State<MainPage> {
       ),
     );
   }
-
-  // void showDialogBottom() {
-  //   showGeneralDialog(
-  //     barrierLabel: "Barrier",
-  //     barrierDismissible: true,
-  //     barrierColor: Colors.black.withOpacity(0.5),
-  //     transitionDuration: Duration(milliseconds: 400),
-  //     context: context,
-  //     pageBuilder: (_, __, ___) {
-  //       return Align(
-  //         alignment: Alignment.bottomCenter,
-  //         child: Container(
-  //           color: Colors.green,
-  //           height: 40,
-  //           child: Text(
-  //             "Änderungen wurden gespeichert.",
-  //             style: TextStyle(color: Colors.white, fontSize: 12),
-  //           ),
-  //           //margin: EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 10),
-  //         ),
-  //       );
-  //     },
-  //     transitionBuilder: (_, anim, __, child) {
-  //       return SlideTransition(
-  //         position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim),
-  //         child: child,
-  //       );
-  //     },
-  //   );
-  // }
 
   void openEditCustomerDialog(Customer customer) {
     var nameController = new TextEditingController(text: customer.name);
@@ -442,7 +386,7 @@ class _MainPageState extends State<MainPage> {
                           color: Colors.white,
                           child: ListTile(
                             leading: CircleAvatar(
-                              backgroundColor: Colors.indigoAccent,
+                              backgroundColor: RandomColor().randomColor(),
                               child: Text(customer.name.characters.first),
                               foregroundColor: Colors.white,
                             ),
@@ -597,19 +541,4 @@ class _MainPageState extends State<MainPage> {
       ),
     )..show(context);
   }
-
-  // void showDeleteSnackBar(BuildContext context, Customer customer) {
-  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //     backgroundColor: Colors.red,
-  //     duration: Duration(seconds: 1),
-  //     content: Text(customer.name + " wurde gelöscht"),
-  //     action: SnackBarAction(
-  //       textColor: Colors.black87,
-  //       label: 'Rückgängig',
-  //       onPressed: () {
-  //         DatabaseHelper.addCustomer(customer);
-  //       },
-  //     ),
-  //   ));
-  // }
 }
