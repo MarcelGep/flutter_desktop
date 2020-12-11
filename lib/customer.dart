@@ -40,44 +40,4 @@ class Customer {
     obj['web'] = web;
     return obj;
   }
-
-  // String get getId => id;
-
-  // set setId(String id) => this.id = id;
-
-  // String get getName => name;
-
-  // set setName(String name) => this.name = name;
-
-  // String get getContact => contact;
-
-  // set setContact(String contact) => this.contact = contact;
-
-  // String get getStreet => street;
-
-  // set setStreet(String street) => this.street = street;
-
-  // String get getZip => zip;
-
-  // set setZip(String zip) => this.zip = zip;
-
-  // String get getLocation => location;
-
-  // set setLocation(String location) => this.location = location;
-
-  // String get getPhone => phone;
-
-  // set setPhone(String phone) => this.phone = phone;
-
-  // String get getFax => fax;
-
-  // set setFax(String fax) => this.fax = fax;
-
-  // String get getEmail => email;
-
-  // set setEmail(String email) => this.email = email;
-
-  // String get getWeb => web;
-
-  // set setWeb(String web) => this.web = web;
 }
