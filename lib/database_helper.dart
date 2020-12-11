@@ -5,8 +5,11 @@ class DatabaseHelper {
   static CollectionReference _customers =
       FirebaseFirestore.instance.collection('customers');
 
-  static addCustomerData(Customer customer) {
+  static addCustomer(Customer customer) {
+    DocumentReference ref = _customers.doc();
+
     Map<String, dynamic> data = {
+      "id": ref.id,
       "name": customer.name,
       "contact": customer.contact,
       "street": customer.street,
@@ -18,7 +21,24 @@ class DatabaseHelper {
       "web": customer.web
     };
 
-    _customers.add(data);
+    ref.set(data);
+  }
+
+  static Future<void> deleteCustomer(Customer customer) {
+    return _customers
+        .doc(customer.id)
+        .delete()
+        .then((value) => print("User Deleted"))
+        .catchError((error) => print("Failed to delete user: $error"));
+  }
+
+  static Stream<List<Customer>> getCustomerStream() {
+    Query _sortCustomers = FirebaseFirestore.instance
+        .collection("customers")
+        .orderBy('name', descending: false);
+    Stream<QuerySnapshot> stream = _sortCustomers.snapshots();
+    return stream.map((qShot) =>
+        qShot.docs.map((doc) => Customer.fromMap(doc.data())).toList());
   }
 
   // static Future<void> readCustomerData() {
@@ -33,22 +53,8 @@ class DatabaseHelper {
   //       );
   // }
 
-  static Future<void> deleteUser() {
-    return _customers
-        .doc(_customers.id)
-        .delete()
-        .then((value) => print("User Deleted"))
-        .catchError((error) => print("Failed to delete user: $error"));
-  }
-
-  static Stream<List<Customer>> getCustomerStream() {
-    Stream<QuerySnapshot> stream = _customers.snapshots();
-    return stream.map((qShot) =>
-        qShot.docs.map((doc) => Customer.fromMap(doc.data())).toList());
-  }
-
-  static Future<List<Customer>> getCustomerData() async {
-    QuerySnapshot qShot = await _customers.get();
-    return qShot.docs.map((doc) => Customer.fromMap(doc.data())).toList();
-  }
+  // static Future<List<Customer>> getCustomerData() async {
+  //   QuerySnapshot qShot = await _sortCustomers.get();
+  //   return qShot.docs.map((doc) => Customer.fromMap(doc.data())).toList();
+  // }
 }
