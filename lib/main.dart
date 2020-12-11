@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_desktop/auth_helper.dart';
+import 'package:flutter_desktop/database/auth_helper.dart';
 import 'package:provider/provider.dart';
-import 'authentication_wrapper.dart';
+import 'helpers/authentication_wrapper.dart';
 
 void main() async {
   //Activate for Windows Application

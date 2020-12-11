@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_desktop/auth_helper.dart';
-import 'package:flutter_desktop/database_helper.dart';
+import 'package:flutter_desktop/database/auth_helper.dart';
+import 'package:flutter_desktop/widgets/bezierContainer.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'Widget/bezierContainer.dart';
 import 'main_screen.dart';
 import 'signup_screen.dart';
 

@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_desktop/dialog_helper.dart';
+import 'package:flutter_desktop/helpers/dialog_helper.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:random_color/random_color.dart';
 
-import 'customer.dart';
-import 'database_helper.dart';
+import '../models/customer.dart';
+import '../database/database_helper.dart';
 
 class CustomerList extends StatelessWidget {
   const CustomerList({

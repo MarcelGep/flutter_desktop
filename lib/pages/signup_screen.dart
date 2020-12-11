@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'auth_helper.dart';
+import 'package:flutter_desktop/database/auth_helper.dart';
+import 'package:flutter_desktop/widgets/bezierContainer.dart';
 import 'main_screen.dart';
-import 'widget/bezierContainer.dart';
 import 'login_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 

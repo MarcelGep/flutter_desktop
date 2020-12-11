@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_desktop/customer.dart';
+import 'package:flutter_desktop/models/customer.dart';
 
 class DatabaseHelper {
   static CollectionReference _customers =

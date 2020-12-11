@@ -5,7 +5,7 @@ import 'package:device_info/device_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:package_info/package_info.dart';
 
-import 'customer.dart';
+import '../models/customer.dart';
 
 class UserHelper {
   static FirebaseFirestore _db = FirebaseFirestore.instance;

@@ -2,8 +2,8 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
-import 'customer.dart';
-import 'database_helper.dart';
+import '../models/customer.dart';
+import '../database/database_helper.dart';
 
 class DialogsHelper {
   static void openEditCustomerDialog(BuildContext context, Customer customer) {

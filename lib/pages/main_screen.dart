@@ -2,11 +2,12 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_desktop/auth_helper.dart';
-import 'package:flutter_desktop/customer.dart';
-import 'package:flutter_desktop/customer_list.dart';
-import 'package:flutter_desktop/database_helper.dart';
-import 'package:flutter_desktop/login_screen.dart';
+import 'package:flutter_desktop/database/auth_helper.dart';
+import 'package:flutter_desktop/models/customer.dart';
+import 'package:flutter_desktop/widgets/customer_list.dart';
+import 'package:flutter_desktop/database/database_helper.dart';
+
+import 'login_screen.dart';
 
 class MainPage extends StatefulWidget {
   @override
