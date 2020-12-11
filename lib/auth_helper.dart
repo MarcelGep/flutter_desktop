@@ -5,16 +5,45 @@ class AuthHelper {
   static FirebaseAuth _auth = FirebaseAuth.instance;
   static GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  static signInWithEmail({String email, String password}) async {
-    final res = await _auth.signInWithEmailAndPassword(
-        email: email, password: password);
-    return res.user;
+  static Stream<User> get authStateChanges {
+    _auth.authStateChanges().listen((User user) {
+      if (user == null) {
+        print('No user is signed in!');
+      } else {
+        String email = user.email;
+        print('User $email is signed in!');
+      }
+    });
+    return _auth.authStateChanges();
   }
 
-  static signUpWithEmail({String email, String password}) async {
-    final res = await _auth.createUserWithEmailAndPassword(
+  static Future<User> signInWithEmail({String email, String password}) async {
+    UserCredential credential = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
-    return res.user;
+    return credential.user;
+  }
+
+  static Future<String> signInWithEmail2(
+      {String email, String password}) async {
+    try {
+      UserCredential credential = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return credential.user.uid;
+    } on FirebaseAuthException catch (e) {
+      print("Sign in error: " + e.code);
+      return e.code;
+    }
+  }
+
+  static Future<String> signUpWithEmail({String email, String password}) async {
+    try {
+      UserCredential credential = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      return credential.user.uid;
+    } on FirebaseAuthException catch (e) {
+      print("Sign in error: " + e.code);
+      return e.code;
+    }
   }
 
   static signInWithGoogle() async {
@@ -41,7 +70,7 @@ class AuthHelper {
   }
 
   static logOut() {
-    _googleSignIn.signOut();
+    //_googleSignIn.signOut();
     return _auth.signOut();
   }
 }

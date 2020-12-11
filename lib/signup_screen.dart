@@ -1,12 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_desktop/main.dart';
+import 'auth_helper.dart';
 import 'main_screen.dart';
 import 'widget/bezierContainer.dart';
-import 'authentication_service.dart';
 import 'login_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({Key key, this.title}) : super(key: key);
@@ -83,9 +80,9 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             onPressed: () async {
               String errorMessage;
-              String result = await context
-                  .read<AuthenticationService>()
-                  .signUp(emailController.text, passwordController.text);
+              String result = await AuthHelper.signUpWithEmail(
+                  email: emailController.text,
+                  password: passwordController.text);
 
               if (result == 'email-already-in-use')
                 errorMessage = "E-Mail wird bereits verwendet!";
@@ -151,7 +148,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-          text: 'ToDo',
+          text: 'Kunden',
           style: GoogleFonts.portLligatSans(
             fontSize: 30,
             fontWeight: FontWeight.w700,
@@ -159,7 +156,7 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           children: [
             TextSpan(
-              text: 'Flutter',
+              text: 'Verwaltung',
               style: TextStyle(color: Colors.black, fontSize: 30),
             ),
           ]),
@@ -185,7 +182,7 @@ class _SignUpPageState extends State<SignUpPage> {
         child: Stack(
           children: <Widget>[
             Positioned(
-              top: -MediaQuery.of(context).size.height * .15,
+              top: -height * .19,
               right: -MediaQuery.of(context).size.width * .4,
               child: BezierContainer(),
             ),
@@ -212,7 +209,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
-            Positioned(top: 40, left: 0, child: _backButton()),
+            Positioned(top: 65, left: 0, child: _backButton()),
           ],
         ),
       ),

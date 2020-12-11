@@ -1,24 +1,27 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/auth_helper.dart';
+import 'package:flutter_desktop/database_helper.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'Widget/bezierContainer.dart';
-import 'authentication_service.dart';
 import 'main_screen.dart';
 import 'signup_screen.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController emailController = new TextEditingController();
-  final TextEditingController passwordController = new TextEditingController();
+  TextEditingController emailController;
+  TextEditingController passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController(text: "");
+    passwordController = TextEditingController(text: "");
+  }
 
   Widget _entryField(String title, TextEditingController controller,
       {bool isPassword = false}) {
@@ -92,21 +95,25 @@ class _LoginPageState extends State<LoginPage> {
               style: TextStyle(fontSize: 18, color: Colors.white),
             ),
             onPressed: () async {
-              String errorMessage;
-              String result = await context
-                  .read<AuthenticationService>()
-                  .signIn(emailController.text, passwordController.text);
+              try {
+                await AuthHelper.signInWithEmail(
+                    email: emailController.text,
+                    password: passwordController.text);
+              } catch (e) {
+                print(e);
+                String errorMessage = e.toString();
+                if (errorMessage.contains('wrong-password'))
+                  errorMessage = "Falsches Password!";
+                if (errorMessage.contains('invalid-email'))
+                  errorMessage = "Ungültige E-Mail Adresse!";
+                if (errorMessage.contains('unknown'))
+                  errorMessage = "Unbekannter Fehler!";
+                if (errorMessage.contains('user-not-found'))
+                  errorMessage = "Benutzer wurde nicht gefunden!";
 
-              if (result == 'wrong-password')
-                errorMessage = "Falsches Password!";
-              if (result == 'invalid-email')
-                errorMessage = "Ungültige E-Mail Adresse!";
-              if (result == 'unknown') errorMessage = "Unbekannter Fehler!";
-              if (result == 'user-not-found')
-                errorMessage = "Benutzer wurde nicht gefunden!";
-
-              if (errorMessage != null) {
-                Scaffold.of(context).showSnackBar(SnackBar(
+                // ignore: deprecated_member_use
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
                     duration: const Duration(seconds: 2),
                     backgroundColor: Colors.red,
                     content: Row(
@@ -116,10 +123,9 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(width: 5),
                         Text(errorMessage),
                       ],
-                    )));
-              } else {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MainPage()));
+                    ),
+                  ),
+                );
               }
             }),
       ),

@@ -1,11 +1,12 @@
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_desktop/auth_helper.dart';
 import 'package:flutter_desktop/customer.dart';
+import 'package:flutter_desktop/database_helper.dart';
 import 'package:flutter_desktop/login_screen.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:provider/provider.dart';
-import 'authentication_service.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -16,43 +17,37 @@ class _MainPageState extends State<MainPage> {
   final List<Customer> customers = <Customer>[];
 
   void _addCustomer() {
+    var faker = new Faker();
+    Customer newCustomer = new Customer(
+        faker.internet.userName(),
+        faker.person.name(),
+        "Muster Str. 12",
+        "89323",
+        "Musterstadt",
+        "0123456789",
+        "0123456789",
+        faker.internet.email(),
+        "www." + faker.internet.userName() + ".de");
+
     setState(() {
-      var faker = new Faker();
-      customers.add(new Customer(
-          faker.internet.userName(),
-          faker.person.name(),
-          "Muster Str. 12",
-          "89323",
-          "Musterstadt",
-          "0123456789",
-          "0123456789",
-          faker.internet.email(),
-          "www." + faker.internet.userName() + ".de"));
+      customers.add(newCustomer);
     });
+
+    DatabaseHelper.addCustomerData(newCustomer);
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Text('KundenAppFlutter'),
-          bottom: TabBar(
-            tabs: [
-              Tab(
-                  text: "Kunden",
-                  icon: Icon(IconData(0xf03e, fontFamily: 'MaterialIcons'))),
-              Tab(
-                  text: "Rechnungen",
-                  icon: Icon(IconData(0xe5b6, fontFamily: 'MaterialIcons'))),
-              Tab(text: "Artikel", icon: Icon(Icons.directions_bike)),
-            ],
-          ),
           actions: <Widget>[
             FlatButton(
               onPressed: () {
-                context.read<AuthenticationService>().signOut();
+                AuthHelper.logOut();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -62,8 +57,8 @@ class _MainPageState extends State<MainPage> {
               child: Row(
                 children: [
                   Icon(Icons.logout, size: 26.0, color: Colors.white),
-                  SizedBox(width: 3),
-                  Text('Logout', style: TextStyle(color: Colors.white)),
+                  SizedBox(width: 4),
+                  Text('LOGOUT', style: TextStyle(color: Colors.white)),
                 ],
               ),
             )
@@ -72,10 +67,53 @@ class _MainPageState extends State<MainPage> {
         body: TabBarView(
           children: [
             _createCustomerList(),
+            Icon(Icons.receipt_sharp),
             Icon(Icons.directions_bike),
-            Icon(Icons.directions_bike),
+            Icon(Icons.settings),
           ],
         ),
+        // bottomNavigationBar: TabBar(
+        //   tabs: [
+        //     Tab(
+        //         text: "Kunden",
+        //         icon: Icon(IconData(0xf03e, fontFamily: 'MaterialIcons'))),
+        //     Tab(
+        //         text: "Rechnungen",
+        //         icon: Icon(IconData(0xe5b6, fontFamily: 'MaterialIcons'))),
+        //     Tab(text: "Artikel", icon: Icon(Icons.directions_bike)),
+        //   ],
+        // ),
+        // bottomNavigationBar: AnimatedBottomNavigationBar(
+        //   icons: [Icons.settings, Icons.bike_scooter, Icons.person],
+        //   activeIndex: bottomIndex,
+        //   gapLocation: GapLocation.end,
+        //   notchSmoothness: NotchSmoothness.defaultEdge,
+        //   // leftCornerRadius: 32,
+        //   // rightCornerRadius: 32,
+        //   backgroundColor: Colors.blue,
+        //   activeColor: Colors.white,
+        //   onTap: (index) => setState(() {
+        //     bottomIndex = index;
+        //   }),
+        // ),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        bottomNavigationBar: ConvexAppBar(
+          style: TabStyle.react,
+          height: 60,
+          top: 0,
+          items: [
+            TabItem(
+                icon: IconData(0xf03e, fontFamily: 'MaterialIcons'),
+                title: "Kunden"),
+            TabItem(
+                icon: IconData(0xe5b6, fontFamily: 'MaterialIcons'),
+                title: "Rechnungen"),
+            TabItem(icon: Icons.directions_bike, title: "Artikel"),
+            TabItem(icon: Icons.settings, title: "Einstellungen"),
+          ],
+          onTap: (int i) => print('click index=$i'),
+        ),
+
         floatingActionButton: FloatingActionButton(
           onPressed: _addCustomer,
           tooltip: 'Kunde hinzufügen',
@@ -85,35 +123,35 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  void showDialogBottom() {
-    showGeneralDialog(
-      barrierLabel: "Barrier",
-      barrierDismissible: true,
-      barrierColor: Colors.black.withOpacity(0.5),
-      transitionDuration: Duration(milliseconds: 400),
-      context: context,
-      pageBuilder: (_, __, ___) {
-        return Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            color: Colors.green,
-            height: 40,
-            child: Text(
-              "Änderungen wurden gespeichert.",
-              style: TextStyle(color: Colors.white, fontSize: 12),
-            ),
-            //margin: EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 10),
-          ),
-        );
-      },
-      transitionBuilder: (_, anim, __, child) {
-        return SlideTransition(
-          position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim),
-          child: child,
-        );
-      },
-    );
-  }
+  // void showDialogBottom() {
+  //   showGeneralDialog(
+  //     barrierLabel: "Barrier",
+  //     barrierDismissible: true,
+  //     barrierColor: Colors.black.withOpacity(0.5),
+  //     transitionDuration: Duration(milliseconds: 400),
+  //     context: context,
+  //     pageBuilder: (_, __, ___) {
+  //       return Align(
+  //         alignment: Alignment.bottomCenter,
+  //         child: Container(
+  //           color: Colors.green,
+  //           height: 40,
+  //           child: Text(
+  //             "Änderungen wurden gespeichert.",
+  //             style: TextStyle(color: Colors.white, fontSize: 12),
+  //           ),
+  //           //margin: EdgeInsets.only(bottom: 0, left: 0, right: 0, top: 10),
+  //         ),
+  //       );
+  //     },
+  //     transitionBuilder: (_, anim, __, child) {
+  //       return SlideTransition(
+  //         position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim),
+  //         child: child,
+  //       );
+  //     },
+  //   );
+  // }
 
   void openEditCustomerDialog(Customer customer) {
     var nameController = new TextEditingController(text: customer.name);
@@ -213,14 +251,21 @@ class _MainPageState extends State<MainPage> {
                           children: <Widget>[
                             FlatButton(
                               onPressed: () {
+                                setState(() {
+                                  customer.name = nameController.text;
+                                  customer.contact = contactController.text;
+                                  customer.street = streetController.text;
+                                  customer.location = locationController.text;
+                                  customer.phone = phoneController.text;
+                                  customer.email = emailController.text;
+                                  customer.web = webController.text;
+                                });
                                 Navigator.of(context).pop();
-                                //TODO customer edit
-                                //showDialogBottom();
                               },
                               child: Text(
                                 'Speichern',
                                 style:
-                                    TextStyle(fontSize: 16, color: Colors.blue),
+                                    TextStyle(fontSize: 18, color: Colors.blue),
                               ),
                             ),
                             FlatButton(
@@ -230,7 +275,7 @@ class _MainPageState extends State<MainPage> {
                               child: Text(
                                 'Abbrechen',
                                 style:
-                                    TextStyle(fontSize: 16, color: Colors.blue),
+                                    TextStyle(fontSize: 18, color: Colors.blue),
                               ),
                             ),
                           ],
@@ -341,17 +386,14 @@ class _MainPageState extends State<MainPage> {
                         height: 22,
                       ),
                       Align(
-                        alignment: Alignment.bottomRight,
-                        child: RaisedButton(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 25, vertical: 10),
-                          color: Colors.blue,
+                        alignment: Alignment.bottomCenter,
+                        child: FlatButton(
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
                           child: Text(
-                            'Schließen',
-                            style: TextStyle(fontSize: 16, color: Colors.white),
+                            'ZURÜCK',
+                            style: TextStyle(fontSize: 18, color: Colors.blue),
                           ),
                         ),
                       ),
@@ -378,159 +420,178 @@ class _MainPageState extends State<MainPage> {
 
   Widget _createCustomerList() {
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-      child: customers.length > 0
-          ? CupertinoScrollbar(
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: customers.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final Customer item = customers[index];
-                  return Slidable(
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.25,
-                    child: Container(
-                      color: Colors.white,
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.indigoAccent,
-                          child: Text(item.name.characters.first),
-                          foregroundColor: Colors.white,
+        color: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+        child: CupertinoScrollbar(
+          child: StreamBuilder(
+            stream: DatabaseHelper.getCustomerStream(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (!snapshot.hasData) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                return Container(
+                  child: ListView.builder(
+                    itemCount: snapshot.data.length,
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      final Customer customer = snapshot.data[index];
+                      return Slidable(
+                        actionPane: SlidableDrawerActionPane(),
+                        actionExtentRatio: 0.25,
+                        child: Container(
+                          color: Colors.white,
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.indigoAccent,
+                              child: Text(customer.name.characters.first),
+                              foregroundColor: Colors.white,
+                            ),
+                            title: Text(
+                              customer.name,
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.black),
+                            ),
+                            trailing: PopupMenuButton(
+                              itemBuilder: (BuildContext context) =>
+                                  <PopupMenuEntry>[
+                                PopupMenuItem(
+                                  value: 1,
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.create_new_folder,
+                                          color: Colors.green),
+                                      SizedBox(width: 8),
+                                      Text('Rechnung erstellen',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500)),
+                                    ],
+                                  ),
+                                ),
+                                PopupMenuDivider(
+                                  height: 8,
+                                ),
+                                PopupMenuItem(
+                                  value: 2,
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.edit, color: Colors.black45),
+                                      SizedBox(width: 8),
+                                      Text('Bearbeiten'),
+                                    ],
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  value: 3,
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.delete, color: Colors.red),
+                                      SizedBox(width: 8),
+                                      Text('Löschen'),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                              onSelected: (value) {
+                                switch (value) {
+                                  case 1:
+                                    //Invoice button
+                                    break;
+                                  case 2:
+                                    //Edit button
+                                    openEditCustomerDialog(customer);
+                                    break;
+                                  case 3:
+                                    //Delete button
+                                    setState(() {
+                                      DatabaseHelper.deleteUser(customer);
+                                      Scaffold.of(context)
+                                          .showSnackBar(SnackBar(
+                                        backgroundColor: Colors.red,
+                                        duration: Duration(seconds: 1),
+                                        content: Text(
+                                            customer.name + " wurde gelöscht"),
+                                        action: SnackBarAction(
+                                          textColor: Colors.black87,
+                                          label: 'Rückgängig',
+                                          onPressed: () {
+                                            setState(() {
+                                              customers.insert(index, customer);
+                                            });
+                                          },
+                                        ),
+                                      ));
+                                    });
+                                    break;
+                                }
+                                print("value: $value");
+                              },
+                              icon: Icon(Icons.more_vert),
+                            ),
+                            subtitle: Text(
+                              customer.email,
+                            ),
+                            onTap: () => openShowCustomerDialog(customer),
+                          ),
                         ),
-                        title: Text(
-                          customers[index].name,
-                          style: TextStyle(fontSize: 16, color: Colors.black),
-                        ),
-                        trailing: PopupMenuButton(
-                          itemBuilder: (BuildContext context) =>
-                              <PopupMenuEntry>[
-                            PopupMenuItem(
-                              value: 1,
-                              child: Row(
-                                children: [
-                                  Icon(Icons.create_new_folder,
-                                      color: Colors.green),
-                                  SizedBox(width: 8),
-                                  Text('Rechnung erstellen',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500)),
-                                ],
-                              ),
-                            ),
-                            PopupMenuDivider(
-                              height: 8,
-                            ),
-                            PopupMenuItem(
-                              value: 2,
-                              child: Row(
-                                children: [
-                                  Icon(Icons.edit, color: Colors.black45),
-                                  SizedBox(width: 8),
-                                  Text('Bearbeiten'),
-                                ],
-                              ),
-                            ),
-                            PopupMenuItem(
-                              value: 3,
-                              child: Row(
-                                children: [
-                                  Icon(Icons.delete, color: Colors.red),
-                                  SizedBox(width: 8),
-                                  Text('Löschen'),
-                                ],
-                              ),
-                            ),
-                          ],
-                          onSelected: (value) {
-                            switch (value) {
-                              case 1:
-                                break;
-                              case 2:
-                                openEditCustomerDialog(item);
-                                break;
-                              case 3:
-                                setState(() {
-                                  customers.remove(item);
+                        actions: <Widget>[
+                          IconSlideAction(
+                            caption: 'Rechnung',
+                            color: Colors.green,
+                            icon: Icons.create_new_folder,
+                            onTap: () {
+                              print('Rechnung erstellen');
+                            },
+                          ),
+                        ],
+                        secondaryActions: <Widget>[
+                          IconSlideAction(
+                            caption: 'Bearbeiten',
+                            color: Colors.black45,
+                            icon: Icons.edit,
+                            onTap: () {
+                              openEditCustomerDialog(customer);
+                            },
+                          ),
+                          IconSlideAction(
+                            caption: 'Löschen',
+                            color: Colors.red,
+                            icon: Icons.delete,
+                            onTap: () {
+                              setState(
+                                () {
+                                  customers.remove(customer);
                                   Scaffold.of(context).showSnackBar(SnackBar(
                                     backgroundColor: Colors.red,
                                     duration: Duration(seconds: 1),
                                     content:
-                                        Text(item.name + " wurde gelöscht"),
+                                        Text(customer.name + " wurde gelöscht"),
                                     action: SnackBarAction(
                                       textColor: Colors.black87,
                                       label: 'Rückgängig',
                                       onPressed: () {
                                         setState(() {
-                                          customers.insert(index, item);
+                                          customers.insert(index, customer);
                                         });
                                       },
                                     ),
                                   ));
-                                });
-                                break;
-                            }
-                            print("value: $value");
-                          },
-                          icon: Icon(Icons.more_vert),
-                        ),
-                        subtitle: Text(
-                          customers[index].email,
-                        ),
-                        onTap: () => openShowCustomerDialog(customers[index]),
-                      ),
-                    ),
-                    actions: <Widget>[
-                      IconSlideAction(
-                        caption: 'Rechnung',
-                        color: Colors.green,
-                        icon: Icons.create_new_folder,
-                        onTap: () {
-                          print('Rechnung erstellen');
-                        },
-                      ),
-                    ],
-                    secondaryActions: <Widget>[
-                      IconSlideAction(
-                        caption: 'Bearbeiten',
-                        color: Colors.black45,
-                        icon: Icons.edit,
-                        onTap: () {
-                          openEditCustomerDialog(item);
-                        },
-                      ),
-                      IconSlideAction(
-                        caption: 'Löschen',
-                        color: Colors.red,
-                        icon: Icons.delete,
-                        onTap: () {
-                          setState(() {
-                            customers.remove(item);
-                            Scaffold.of(context).showSnackBar(SnackBar(
-                              backgroundColor: Colors.red,
-                              duration: Duration(seconds: 1),
-                              content: Text(item.name + " wurde gelöscht"),
-                              action: SnackBarAction(
-                                textColor: Colors.black87,
-                                label: 'Rückgängig',
-                                onPressed: () {
-                                  setState(() {
-                                    customers.insert(index, item);
-                                  });
                                 },
-                              ),
-                            ));
-                          });
-                        },
-                      ),
-                    ],
-                  );
-                },
-              ),
-            )
-          : Center(child: const Text('Keine Einträge')),
-    );
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                );
+              }
+            },
+          ),
+        )
+        //: Center(child: const Text('Keine Einträge')),
+        );
   }
 }
