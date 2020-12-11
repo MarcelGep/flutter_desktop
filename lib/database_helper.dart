@@ -28,7 +28,6 @@ class DatabaseHelper {
     return _customers
         .doc(customer.id)
         .delete()
-        .then((value) => print("User Deleted"))
         .catchError((error) => print("Failed to delete user: $error"));
   }
 
@@ -39,6 +38,10 @@ class DatabaseHelper {
     Stream<QuerySnapshot> stream = _sortCustomers.snapshots();
     return stream.map((qShot) =>
         qShot.docs.map((doc) => Customer.fromMap(doc.data())).toList());
+  }
+
+  static void updateCustomer(Customer customer) {
+    _customers.doc(customer.id).update(customer.toMap());
   }
 
   // static Future<void> readCustomerData() {
