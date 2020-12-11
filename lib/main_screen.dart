@@ -503,7 +503,7 @@ class _MainPageState extends State<MainPage> {
                                   case 3:
                                     //Delete button
                                     DatabaseHelper.deleteCustomer(customer);
-                                    showFlushbar(context, customer);
+                                    showDeleteFlushbar(context, customer);
                                     break;
                                 }
                               },
@@ -540,7 +540,7 @@ class _MainPageState extends State<MainPage> {
                             icon: Icons.delete,
                             onTap: () {
                               DatabaseHelper.deleteCustomer(customer);
-                              showFlushbar(context, customer);
+                              showDeleteFlushbar(context, customer);
                             },
                           ),
                         ],
@@ -556,7 +556,7 @@ class _MainPageState extends State<MainPage> {
         );
   }
 
-  void showFlushbar(BuildContext context, Customer customer) {
+  void showDeleteFlushbar(BuildContext context, Customer customer) {
     int durationMs = 1500;
     Flushbar<List<String>> flush;
     flush = Flushbar<List<String>>(
