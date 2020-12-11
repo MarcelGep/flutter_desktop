@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
-import 'package:flutter_desktop/widgets/bezierContainer.dart';
+import 'package:flutter_desktop/widgets/bezier_container.dart';
 import 'main_screen.dart';
 import 'login_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
