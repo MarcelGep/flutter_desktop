@@ -17,17 +17,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   void _addCustomer() {
     var faker = new Faker();
-    Customer newCustomer = new Customer(
-        null,
-        faker.internet.userName(),
-        faker.person.name(),
-        "Muster Str. 12",
-        "89323",
-        "Musterstadt",
-        "0123456789",
-        "0123456789",
-        faker.internet.email(),
-        "www." + faker.internet.userName() + ".de");
+    Customer newCustomer = new Customer(null, faker.internet.userName(), faker.person.name(), "Muster Str. 12", "89323",
+        "Musterstadt", "0123456789", "0123456789", faker.internet.email(), "www." + faker.internet.userName() + ".de");
 
     DatabaseHelper.addCustomer(newCustomer);
   }
@@ -73,12 +64,8 @@ class _MainPageState extends State<MainPage> {
           height: 60,
           top: 0,
           items: [
-            TabItem(
-                icon: IconData(0xf03e, fontFamily: 'MaterialIcons'),
-                title: "Kunden"),
-            TabItem(
-                icon: IconData(0xe5b6, fontFamily: 'MaterialIcons'),
-                title: "Rechnungen"),
+            TabItem(icon: IconData(0xf03e, fontFamily: 'MaterialIcons'), title: "Kunden"),
+            TabItem(icon: IconData(0xe5b6, fontFamily: 'MaterialIcons'), title: "Rechnungen"),
             TabItem(icon: Icons.directions_bike, title: "Artikel"),
             TabItem(icon: Icons.settings, title: "Einstellungen"),
           ],
