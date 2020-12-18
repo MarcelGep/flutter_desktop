@@ -30,14 +30,15 @@ class CustomerPage extends StatelessWidget {
     return new Scaffold(
       appBar: AppBar(
         title: Text("Kunden"),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () => _addCustomer(),
+            child: Icon(Icons.add, color: Colors.white),
+          )
+        ],
       ),
       drawer: AppDrawer(),
       body: CustomerList(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addCustomer,
-        tooltip: 'Kunde hinzufügen',
-        child: Icon(Icons.add),
-      ),
     );
   }
 }
