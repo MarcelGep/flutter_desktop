@@ -12,7 +12,7 @@ class AppDrawer extends StatelessWidget {
     return ListTile(
       title: Row(
         children: <Widget>[
-          Icon(icon, color: Colors.blue),
+          Icon(icon, color: Colors.blue, size: 30),
           Padding(
             padding: EdgeInsets.only(left: 15.0),
             child: Text(text),
@@ -68,7 +68,8 @@ class AppDrawer extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (userName != null && userName.isNotEmpty) Text(userName),
+            if (userName != null && userName.isNotEmpty)
+              Text(userName, style: TextStyle(fontWeight: FontWeight.w800)),
             Text(userEmail),
           ],
         ),
