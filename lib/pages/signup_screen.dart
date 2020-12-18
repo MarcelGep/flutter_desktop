@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
 import 'package:flutter_desktop/widgets/bezier_container.dart';
-import 'main_screen.dart';
+import 'customer_page.dart';
 import 'login_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -104,7 +104,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     )));
               } else {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MainPage()));
+                    MaterialPageRoute(builder: (context) => CustomerPage()));
               }
             }),
       ),

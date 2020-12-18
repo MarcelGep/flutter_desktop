@@ -23,18 +23,6 @@ class AuthHelper {
     return credential.user;
   }
 
-  static Future<String> signInWithEmail2(
-      {String email, String password}) async {
-    try {
-      UserCredential credential = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      return credential.user.uid;
-    } on FirebaseAuthException catch (e) {
-      print("Sign in error: " + e.code);
-      return e.code;
-    }
-  }
-
   static Future<String> signUpWithEmail({String email, String password}) async {
     try {
       UserCredential credential = await _auth.createUserWithEmailAndPassword(
@@ -69,8 +57,27 @@ class AuthHelper {
     return null;
   }
 
-  static logOut() {
-    //_googleSignIn.signOut();
-    return _auth.signOut();
+  static logOut() async {
+    if (await _googleSignIn.isSignedIn()) {
+      String currentUser = _googleSignIn.currentUser.displayName;
+      _googleSignIn.signOut();
+      print("Signed out google account: " + currentUser);
+    }
+    _auth.signOut();
+  }
+
+  static Map<String, String> getCurrentUser() {
+    Map<String, String> currentUserData = Map<String, String>();
+    String displayName = "";
+    String email = _auth.currentUser.email;
+
+    if (_auth.currentUser.displayName != null) {
+      displayName = _auth.currentUser.displayName;
+    }
+
+    currentUserData['name'] = displayName;
+    currentUserData['email'] = email;
+
+    return currentUserData;
   }
 }

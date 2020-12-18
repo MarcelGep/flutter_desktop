@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
+import 'package:flutter_desktop/routes/routes.dart';
 import 'package:flutter_desktop/widgets/bezier_container.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'main_screen.dart';
 import 'signup_screen.dart';
 
 class LoginPage extends StatefulWidget {
+  static const String routeName = '/login';
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -97,6 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                 await AuthHelper.signInWithEmail(
                     email: emailController.text,
                     password: passwordController.text);
+                Navigator.pushReplacementNamed(context, Routes.customers);
               } catch (e) {
                 print(e);
                 String errorMessage = e.toString();
@@ -130,36 +133,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Widget _googleButton1() {
-  //   return OutlineButton(
-  //     splashColor: Colors.grey,
-  //     onPressed: () {},
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-  //     highlightElevation: 0,
-  //     borderSide: BorderSide(color: Colors.grey),
-  //     child: Padding(
-  //       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-  //       child: Row(
-  //         mainAxisSize: MainAxisSize.min,
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: <Widget>[
-  //           Image(image: AssetImage("images/google-logo.png"), height: 35.0),
-  //           Padding(
-  //             padding: const EdgeInsets.only(left: 10),
-  //             child: Text(
-  //               'Login mit Google    ',
-  //               style: TextStyle(
-  //                 fontSize: 20,
-  //                 color: Colors.grey,
-  //               ),
-  //             ),
-  //           )
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget _googleButton() {
     return RaisedButton(
       child: Row(
@@ -179,13 +152,7 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () {
         AuthHelper.signInWithGoogle().then((result) {
           if (result != null) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) {
-                  return MainPage();
-                },
-              ),
-            );
+            Navigator.pushReplacementNamed(context, Routes.customers);
           }
         });
       },

@@ -29,7 +29,8 @@ class CustomerList extends StatelessWidget {
                 return Container(
                   child: ListView.builder(
                     itemCount: snapshot.data.length,
-                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
@@ -43,22 +44,28 @@ class CustomerList extends StatelessWidget {
                           child: ListTile(
                             leading: CircleAvatar(
                               backgroundColor: RandomColor().randomColor(),
-                              child: Text(customer.name.characters.first),
+                              child: Text(
+                                  customer.name.characters.first.toUpperCase()),
                               foregroundColor: Colors.white,
                             ),
                             title: Text(
                               customer.name,
-                              style: TextStyle(fontSize: 16, color: Colors.black),
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.black),
                             ),
                             trailing: PopupMenuButton(
-                              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                              itemBuilder: (BuildContext context) =>
+                                  <PopupMenuEntry>[
                                 PopupMenuItem(
                                   value: 1,
                                   child: Row(
                                     children: [
-                                      Icon(Icons.create_new_folder, color: Colors.green),
+                                      Icon(Icons.create_new_folder,
+                                          color: Colors.green),
                                       SizedBox(width: 8),
-                                      Text('Rechnung erstellen', style: TextStyle(fontWeight: FontWeight.w500)),
+                                      Text('Rechnung erstellen',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500)),
                                     ],
                                   ),
                                 ),
@@ -93,12 +100,14 @@ class CustomerList extends StatelessWidget {
                                     break;
                                   case 2:
                                     //Edit button
-                                    DialogsHelper.openEditCustomerDialog(context, customer);
+                                    DialogsHelper.openEditCustomerDialog(
+                                        context, customer);
                                     break;
                                   case 3:
                                     //Delete button
                                     DatabaseHelper.deleteCustomer(customer);
-                                    DialogsHelper.showDeleteFlushbar(context, customer);
+                                    DialogsHelper.showDeleteFlushbar(
+                                        context, customer);
                                     break;
                                 }
                               },
@@ -107,7 +116,8 @@ class CustomerList extends StatelessWidget {
                             subtitle: Text(
                               customer.email,
                             ),
-                            onTap: () => DialogsHelper.openCustomerInfoDialog(context, customer),
+                            onTap: () => DialogsHelper.openCustomerInfoDialog(
+                                context, customer),
                           ),
                         ),
                         actions: <Widget>[
@@ -126,7 +136,8 @@ class CustomerList extends StatelessWidget {
                             color: Colors.black45,
                             icon: Icons.edit,
                             onTap: () {
-                              DialogsHelper.openEditCustomerDialog(context, customer);
+                              DialogsHelper.openEditCustomerDialog(
+                                  context, customer);
                             },
                           ),
                           IconSlideAction(
@@ -135,7 +146,8 @@ class CustomerList extends StatelessWidget {
                             icon: Icons.delete,
                             onTap: () {
                               DatabaseHelper.deleteCustomer(customer);
-                              DialogsHelper.showDeleteFlushbar(context, customer);
+                              DialogsHelper.showDeleteFlushbar(
+                                  context, customer);
                             },
                           ),
                         ],
