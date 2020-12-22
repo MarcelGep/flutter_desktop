@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/database_helper.dart';
 import 'package:flutter_desktop/models/customer.dart';
 
+// ignore: must_be_immutable
 class CustomerEditDialog extends StatefulWidget {
   Customer customer;
   CustomerEditDialog(this.customer);
@@ -23,13 +24,19 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
   @override
   void initState() {
     super.initState();
-    widget.nameController = new TextEditingController(text: widget.customer.name);
-    widget.contactController = new TextEditingController(text: widget.customer.contact);
-    widget.streetController = new TextEditingController(text: widget.customer.street);
+    widget.nameController =
+        new TextEditingController(text: widget.customer.name);
+    widget.contactController =
+        new TextEditingController(text: widget.customer.contact);
+    widget.streetController =
+        new TextEditingController(text: widget.customer.street);
     widget.zipController = new TextEditingController(text: widget.customer.zip);
-    widget.locationController = new TextEditingController(text: widget.customer.location);
-    widget.phoneController = new TextEditingController(text: widget.customer.phone);
-    widget.emailController = new TextEditingController(text: widget.customer.email);
+    widget.locationController =
+        new TextEditingController(text: widget.customer.location);
+    widget.phoneController =
+        new TextEditingController(text: widget.customer.phone);
+    widget.emailController =
+        new TextEditingController(text: widget.customer.email);
     widget.webController = new TextEditingController(text: widget.customer.web);
   }
 
@@ -50,7 +57,8 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
-                BoxShadow(color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
               ],
             ),
             child: SingleChildScrollView(
@@ -132,7 +140,8 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
                 maxLength: 5,
                 decoration: InputDecoration(counterText: '', labelText: 'PLZ'),
                 controller: widget.zipController),
-            contentPadding: EdgeInsets.only(left: 71, top: 0, right: 10, bottom: 0),
+            contentPadding:
+                EdgeInsets.only(left: 71, top: 0, right: 10, bottom: 0),
           ),
         ),
         Expanded(
