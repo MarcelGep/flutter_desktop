@@ -67,4 +67,15 @@ class DialogsHelper {
       ),
     )..show(context);
   }
+
+  static void showErrorFlushbar(BuildContext context, String text) {
+    Flushbar<List<String>>(
+      backgroundColor: Colors.red,
+      shouldIconPulse: false,
+      duration: Duration(milliseconds: 1500),
+      messageText: Text(text, style: TextStyle(color: Colors.white)),
+      icon: Icon(IconData(0xead6, fontFamily: 'MaterialIcons'),
+          color: Colors.white),
+    )..show(context);
+  }
 }

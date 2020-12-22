@@ -5,22 +5,8 @@ import 'package:device_info/device_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:package_info/package_info.dart';
 
-import '../models/customer.dart';
-
 class UserHelper {
   static FirebaseFirestore _db = FirebaseFirestore.instance;
-
-  static saveCustomer(Customer customer) async {
-    Map<String, dynamic> customerData = {
-      "name": customer.name,
-      "contact": customer.contact,
-      "street": customer.street,
-      "location": customer.location,
-      "phone": customer.phone,
-      "email": customer.email,
-      "web": customer.web,
-    };
-  }
 
   static saveUser(User user) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();

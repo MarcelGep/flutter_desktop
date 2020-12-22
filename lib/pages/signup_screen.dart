@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
+import 'package:flutter_desktop/helpers/dialog_helper.dart';
 import 'package:flutter_desktop/widgets/bezier_container.dart';
 import 'customer_page.dart';
 import 'login_screen.dart';
@@ -91,17 +92,7 @@ class _SignUpPageState extends State<SignUpPage> {
               if (result == 'unknown') errorMessage = "Unbekannter Fehler!";
 
               if (errorMessage != null) {
-                Scaffold.of(context).showSnackBar(SnackBar(
-                    duration: const Duration(seconds: 1),
-                    backgroundColor: Colors.red,
-                    content: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(IconData(0xead6, fontFamily: 'MaterialIcons')),
-                        SizedBox(width: 10),
-                        Text(errorMessage),
-                      ],
-                    )));
+                DialogsHelper.showErrorFlushbar(context, errorMessage);
               } else {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => CustomerPage()));

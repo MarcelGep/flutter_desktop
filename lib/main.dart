@@ -12,9 +12,6 @@ import 'pages/invoice_page.dart';
 import 'routes/routes.dart';
 
 void main() async {
-  //Activate for Windows Application
-  //debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(CustomerMaintenanceApp());

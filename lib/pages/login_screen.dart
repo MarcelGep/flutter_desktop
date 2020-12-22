@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
+import 'package:flutter_desktop/helpers/dialog_helper.dart';
 import 'package:flutter_desktop/routes/routes.dart';
 import 'package:flutter_desktop/widgets/bezier_container.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -112,21 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                 if (errorMessage.contains('user-not-found'))
                   errorMessage = "Benutzer wurde nicht gefunden!";
 
-                // ignore: deprecated_member_use
-                Scaffold.of(context).showSnackBar(
-                  SnackBar(
-                    duration: const Duration(seconds: 2),
-                    backgroundColor: Colors.red,
-                    content: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(IconData(0xe701, fontFamily: 'MaterialIcons')),
-                        SizedBox(width: 5),
-                        Text(errorMessage),
-                      ],
-                    ),
-                  ),
-                );
+                DialogsHelper.showErrorFlushbar(context, errorMessage);
               }
             }),
       ),
