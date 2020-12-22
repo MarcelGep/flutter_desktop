@@ -66,6 +66,10 @@ class AuthHelper {
     _auth.signOut();
   }
 
+  static String getCurrentUserId() {
+    return _auth.currentUser.uid;
+  }
+
   static Map<String, String> getCurrentUser() {
     Map<String, String> currentUserData = Map<String, String>();
     String displayName = "";

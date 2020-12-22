@@ -1,15 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_desktop/database/auth_helper.dart';
 import 'package:flutter_desktop/models/customer.dart';
 
 class DatabaseHelper {
-  static CollectionReference _customers =
-      FirebaseFirestore.instance.collection('customers');
+  static CollectionReference _users =
+      FirebaseFirestore.instance.collection('users');
 
   static addCustomer(Customer customer) {
-    DocumentReference ref = _customers.doc();
+    DocumentReference customerRef =
+        _users.doc(AuthHelper.getCurrentUserId()).collection('customers').doc();
 
     Map<String, dynamic> data = {
-      "id": ref.id,
+      "id": customerRef.id,
       "name": customer.name,
       "contact": customer.contact,
       "street": customer.street,
@@ -21,19 +23,24 @@ class DatabaseHelper {
       "web": customer.web
     };
 
-    ref.set(data);
+    customerRef
+        .set(data)
+        .catchError((error) => print("Failed to add customer: $error"));
   }
 
-  static Future<void> deleteCustomer(Customer customer) {
-    return _customers
+  static deleteCustomer(Customer customer) {
+    _users
+        .doc(AuthHelper.getCurrentUserId())
+        .collection('customers')
         .doc(customer.id)
         .delete()
-        .catchError((error) => print("Failed to delete user: $error"));
+        .catchError((error) => print("Failed to delete customer: $error"));
   }
 
   static Stream<List<Customer>> getCustomerStream() {
-    Query _sortCustomers = FirebaseFirestore.instance
-        .collection("customers")
+    Query _sortCustomers = _users
+        .doc(AuthHelper.getCurrentUserId())
+        .collection('customers')
         .orderBy('name', descending: false);
     Stream<QuerySnapshot> stream = _sortCustomers.snapshots();
     return stream.map((qShot) =>
@@ -41,7 +48,11 @@ class DatabaseHelper {
   }
 
   static void updateCustomer(Customer customer) {
-    _customers.doc(customer.id).update(customer.toMap());
+    _users
+        .doc(AuthHelper.getCurrentUserId())
+        .collection('customers')
+        .doc(customer.id)
+        .update(customer.toMap());
   }
 
   // static Future<void> readCustomerData() {
