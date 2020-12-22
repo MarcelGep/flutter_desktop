@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/models/customer.dart';
 
+// ignore: must_be_immutable
 class CustomerInfoDialog extends StatefulWidget {
   Customer customer;
   CustomerInfoDialog({Key key, this.customer}) : super(key: key);
@@ -26,7 +27,10 @@ class _CustomerInfoDialogState extends State<CustomerInfoDialog> {
               shape: BoxShape.rectangle,
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
-              boxShadow: [BoxShadow(color: Colors.black, offset: Offset(0, 10), blurRadius: 10)],
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 10), blurRadius: 10)
+              ],
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
