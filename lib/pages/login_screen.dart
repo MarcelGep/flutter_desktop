@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
+import 'package:flutter_desktop/database/database_helper.dart';
 import 'package:flutter_desktop/helpers/dialog_helper.dart';
 import 'package:flutter_desktop/routes/routes.dart';
 import 'package:flutter_desktop/widgets/bezier_container.dart';
@@ -139,6 +140,7 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () {
         AuthHelper.signInWithGoogle().then((result) {
           if (result != null) {
+            DatabaseHelper.addUserData(null);
             Navigator.pushReplacementNamed(context, Routes.customers);
           }
         });

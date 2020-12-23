@@ -6,6 +6,21 @@ class DatabaseHelper {
   static CollectionReference _users =
       FirebaseFirestore.instance.collection('users');
 
+  static addUserData(String userName) {
+    Map<String, String> userData = AuthHelper.getCurrentUser();
+
+    String displayName = userData['name'];
+    String email = userData['email'];
+
+    if ((displayName == null || displayName.isEmpty) && userName != null) {
+      displayName = userName;
+    }
+
+    Map<String, dynamic> data = {"displayName": displayName, "email": email};
+
+    _users.doc(AuthHelper.getCurrentUserId()).set(data);
+  }
+
   static addCustomer(Customer customer) {
     DocumentReference customerRef =
         _users.doc(AuthHelper.getCurrentUserId()).collection('customers').doc();

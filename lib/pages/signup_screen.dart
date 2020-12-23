@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
+import 'package:flutter_desktop/database/database_helper.dart';
 import 'package:flutter_desktop/helpers/dialog_helper.dart';
 import 'package:flutter_desktop/widgets/bezier_container.dart';
 import 'customer_page.dart';
@@ -81,19 +82,25 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             onPressed: () async {
               String errorMessage;
-              String result = await AuthHelper.signUpWithEmail(
-                  email: emailController.text,
-                  password: passwordController.text);
 
-              if (result == 'email-already-in-use')
-                errorMessage = "E-Mail wird bereits verwendet!";
-              if (result == 'invalid-email')
-                errorMessage = "Ungültige E-Mail Adresse!";
-              if (result == 'unknown') errorMessage = "Unbekannter Fehler!";
+              if (usernameController.text.isEmpty) {
+                errorMessage = "Bitte Benutzername angeben!";
+              } else {
+                String result = await AuthHelper.signUpWithEmail(
+                    email: emailController.text,
+                    password: passwordController.text);
+
+                if (result == 'email-already-in-use')
+                  errorMessage = "E-Mail wird bereits verwendet!";
+                if (result == 'invalid-email')
+                  errorMessage = "Ungültige E-Mail Adresse!";
+                if (result == 'unknown') errorMessage = "Unbekannter Fehler!";
+              }
 
               if (errorMessage != null) {
                 DialogsHelper.showErrorFlushbar(context, errorMessage);
               } else {
+                DatabaseHelper.addUserData(usernameController.text);
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => CustomerPage()));
               }
