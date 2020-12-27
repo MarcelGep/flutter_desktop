@@ -59,7 +59,7 @@ class AuthHelper {
   }
 
   static logOut() async {
-    if (await _googleSignIn.isSignedIn()) {
+    if (await _googleSignIn.isSignedIn() && _googleSignIn.currentUser != null) {
       String currentUser = _googleSignIn.currentUser.displayName;
       _googleSignIn.signOut();
       print("Signed out google account: " + currentUser);
@@ -84,28 +84,5 @@ class AuthHelper {
     currentUserData['email'] = email;
 
     return currentUserData;
-  }
-
-  static getUserData() async {
-    String userId = AuthHelper.getCurrentUserId();
-    Map<String, String> data = Map<String, String>();
-    print("test1");
-    DocumentSnapshot test =
-        await FirebaseFirestore.instance.collection('users').doc(userId).get();
-    print(test.data());
-    // data.putIfAbsent('displayName', () => test.data()['displayName']);
-    // data.putIfAbsent('email', () => test.data()['email']);
-    // data.forEach((key, value) {
-    //   print(key + " - " + value);
-    // });
-
-    // print(name);
-    // print(email);
-    // _users.doc(userId).get().then((value) {
-    //   data['name'] = value.data()['displayName'];
-    //   data['email'] = value.data()['email'];
-    //   return data;
-    // });
-    return data;
   }
 }

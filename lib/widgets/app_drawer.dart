@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
-import 'package:flutter_desktop/database/database_helper.dart';
-import 'package:flutter_desktop/models/users.dart';
 import 'package:flutter_desktop/routes/routes.dart';
+
+import 'user_info_widget.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({
@@ -53,50 +52,6 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  static Future<String> getUserData() async {}
-
-  Widget _createUserInfos() {
-    String userName = "userName";
-    String userEmail = "userEmail";
-
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc('M6X6B6gYUeZwshltyUN8Pl7YQIJ2')
-        .get()
-        .then((value) {
-      userEmail = value.data()['email'];
-    });
-
-    // if (userData != null) {
-    //   userName = userData['name'];
-    //   userEmail = userData['email'];
-    // }
-    // String userEmail = AuthHelper.getCurrentUser()['email'];
-    // String userName = AuthHelper.getCurrentUser()['name'];
-    return Row(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 10.0),
-          child: CircleAvatar(
-            radius: 22,
-            backgroundColor: Colors.green,
-            child: Text(userEmail.characters.first.toUpperCase()),
-            foregroundColor: Colors.white,
-          ),
-        ),
-        SizedBox(width: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (userName != null && userName.isNotEmpty)
-              Text(userName, style: TextStyle(fontWeight: FontWeight.w800)),
-            Text(userEmail),
-          ],
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -104,7 +59,7 @@ class AppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           _createHeader(),
-          _createUserInfos(),
+          UserInfoWidget(),
           Divider(),
           _createDrawerItem(
             icon: IconData(0xf03e, fontFamily: 'MaterialIcons'),

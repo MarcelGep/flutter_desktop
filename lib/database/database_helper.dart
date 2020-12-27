@@ -24,13 +24,11 @@ class DatabaseHelper {
     _users.doc(AuthHelper.getCurrentUserId()).set(data);
   }
 
-  // static User getUserData(String userId) {
-  //   _users.doc(userId).get().then((snapshot) {
-  //     User user = new User.fromJson(userId, snapshot.data());
-  //     return user;
-  //   });
-  //   return null;
-  // }
+  static Future<User> getUserData() async {
+    String userId = AuthHelper.getCurrentUserId();
+    DocumentSnapshot snapshot = await _users.doc(userId).get();
+    return new User.fromJson(userId, snapshot.data());
+  }
 
   static addCustomer(Customer customer) {
     DocumentReference customerRef =
