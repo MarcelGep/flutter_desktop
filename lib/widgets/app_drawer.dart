@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
+import 'package:flutter_desktop/database/database_helper.dart';
+import 'package:flutter_desktop/models/users.dart';
 import 'package:flutter_desktop/routes/routes.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -50,9 +53,26 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
+  static Future<String> getUserData() async {}
+
   Widget _createUserInfos() {
-    String userEmail = AuthHelper.getCurrentUser()['email'];
-    String userName = AuthHelper.getCurrentUser()['name'];
+    String userName = "userName";
+    String userEmail = "userEmail";
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc('M6X6B6gYUeZwshltyUN8Pl7YQIJ2')
+        .get()
+        .then((value) {
+      userEmail = value.data()['email'];
+    });
+
+    // if (userData != null) {
+    //   userName = userData['name'];
+    //   userEmail = userData['email'];
+    // }
+    // String userEmail = AuthHelper.getCurrentUser()['email'];
+    // String userName = AuthHelper.getCurrentUser()['name'];
     return Row(
       children: [
         Padding(

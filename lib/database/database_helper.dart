@@ -1,6 +1,9 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
 import 'package:flutter_desktop/models/customer.dart';
+import 'package:flutter_desktop/models/users.dart';
 
 class DatabaseHelper {
   static CollectionReference _users =
@@ -20,6 +23,14 @@ class DatabaseHelper {
 
     _users.doc(AuthHelper.getCurrentUserId()).set(data);
   }
+
+  // static User getUserData(String userId) {
+  //   _users.doc(userId).get().then((snapshot) {
+  //     User user = new User.fromJson(userId, snapshot.data());
+  //     return user;
+  //   });
+  //   return null;
+  // }
 
   static addCustomer(Customer customer) {
     DocumentReference customerRef =
