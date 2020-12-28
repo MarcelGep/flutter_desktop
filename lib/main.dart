@@ -27,6 +27,7 @@ class CustomerMaintenanceApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        showPerformanceOverlay: false,
         title: 'KundenVerwaltungsApp',
         theme: ThemeData(
           primarySwatch: Colors.blue,

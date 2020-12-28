@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
 import 'package:flutter_desktop/database/database_helper.dart';
@@ -23,6 +25,12 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     emailController = TextEditingController(text: "");
     passwordController = TextEditingController(text: "");
+    if (Platform.isIOS) {
+      //check for ios if developing for both android & ios
+      AppleSignIn.onCredentialRevoked.listen((_) {
+        print("Credentials revoked");
+      });
+    }
   }
 
   Widget _entryField(String title, TextEditingController controller,
@@ -119,6 +127,31 @@ class _LoginPageState extends State<LoginPage> {
             }),
       ),
     );
+  }
+
+  Widget _getAppleButton() {
+    return AppleSignInButton(
+        type: ButtonType.continueButton,
+        onPressed: () async {
+          if (await AppleSignIn.isAvailable()) {
+            final AuthorizationResult result =
+                await AppleSignIn.performRequests([
+              AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+            ]);
+            print(result.status);
+            switch (result.status) {
+              case AuthorizationStatus.authorized:
+                print(result.credential.user);
+                break; //All the required credentials
+              case AuthorizationStatus.error:
+                print("Sign in failed: ${result.error.localizedDescription}");
+                break;
+              case AuthorizationStatus.cancelled:
+                print('User cancelled');
+                break;
+            }
+          }
+        });
   }
 
   Widget _googleButton() {
@@ -243,6 +276,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     _divider(),
                     SizedBox(height: 20),
+                    //_getAppleButton(),
                     _googleButton(),
                     SizedBox(height: 20),
                     _createAccountLabel(),
