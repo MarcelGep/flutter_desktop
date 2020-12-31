@@ -24,6 +24,12 @@ class CustomerEditDialog extends StatefulWidget {
 }
 
 class _CustomerEditDialogState extends State<CustomerEditDialog> {
+  final _formKeyName = GlobalKey<FormState>();
+  final _formKeyPhone = GlobalKey<FormState>();
+  final _formKeyEmail = GlobalKey<FormState>();
+
+  bool _validated = true;
+
   @override
   void initState() {
     super.initState();
@@ -103,22 +109,34 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
   }
 
   Widget _buildName() {
-    return Container(
-      padding: EdgeInsets.only(left: 18, top: 0, right: 18, bottom: 0),
-      child: TextField(
-        controller: widget.nameController,
-        decoration: InputDecoration(
-          labelText: 'Firma',
-          labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+    return Form(
+      key: _formKeyName,
+      child: Container(
+        padding: EdgeInsets.only(left: 18, top: 0, right: 18, bottom: 0),
+        child: TextFormField(
+          controller: widget.nameController,
+          decoration: InputDecoration(
+            labelText: 'Firma',
+            labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+          ),
+          style: TextStyle(fontWeight: FontWeight.w600),
+          onChanged: (value) => _formKeyName.currentState.validate(),
+          validator: (value) {
+            if (value.isEmpty) {
+              _validated = false;
+              return 'Eingabe erforderlich';
+            }
+            _validated = true;
+            return null;
+          },
         ),
-        style: TextStyle(fontWeight: FontWeight.w600),
       ),
     );
   }
 
   Widget _buildContact() {
     return ListTile(
-      title: TextField(
+      title: TextFormField(
         controller: widget.contactController,
         decoration: InputDecoration(labelText: 'Kontakt'),
       ),
@@ -131,7 +149,8 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
 
   Widget _buildStreet() {
     return ListTile(
-      title: TextField(
+      title: TextFormField(
+        keyboardType: TextInputType.streetAddress,
         controller: widget.streetController,
         decoration: InputDecoration(labelText: 'Straße'),
       ),
@@ -147,11 +166,12 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
       children: [
         Expanded(
           child: ListTile(
-            title: TextField(
-                keyboardType: TextInputType.number,
-                maxLength: 5,
-                decoration: InputDecoration(counterText: '', labelText: 'PLZ'),
-                controller: widget.zipController),
+            title: TextFormField(
+              keyboardType: TextInputType.number,
+              maxLength: 5,
+              decoration: InputDecoration(counterText: '', labelText: 'PLZ'),
+              controller: widget.zipController,
+            ),
             contentPadding:
                 EdgeInsets.only(left: 71, top: 0, right: 10, bottom: 0),
           ),
@@ -159,7 +179,7 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
         Expanded(
           child: Padding(
             padding: EdgeInsets.only(left: 0, top: 0, right: 15, bottom: 0),
-            child: TextField(
+            child: TextFormField(
               controller: widget.locationController,
               decoration: InputDecoration(labelText: 'Ort'),
             ),
@@ -170,15 +190,28 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
   }
 
   Widget _buildPhone() {
-    return ListTile(
-      title: TextField(
-          keyboardType: TextInputType.number,
+    return Form(
+      key: _formKeyPhone,
+      child: ListTile(
+        title: TextFormField(
+          keyboardType: TextInputType.phone,
           maxLength: 15,
           decoration: InputDecoration(counterText: '', labelText: 'Telefon'),
-          controller: widget.phoneController),
-      leading: Icon(
-        Icons.contact_phone,
-        color: Colors.blue[500],
+          controller: widget.phoneController,
+          onChanged: (value) => _formKeyPhone.currentState.validate(),
+          validator: (value) {
+            if (value.isEmpty) {
+              _validated = false;
+              return 'Eingabe erforderlich';
+            }
+            _validated = true;
+            return null;
+          },
+        ),
+        leading: Icon(
+          Icons.contact_phone,
+          color: Colors.blue[500],
+        ),
       ),
     );
   }
@@ -189,9 +222,11 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
         Expanded(
           child: Padding(
             padding: EdgeInsets.only(left: 72, top: 0, right: 15, bottom: 10),
-            child: TextField(
+            child: TextFormField(
+              keyboardType: TextInputType.phone,
+              maxLength: 15,
               controller: widget.faxController,
-              decoration: InputDecoration(labelText: 'Fax'),
+              decoration: InputDecoration(counterText: '', labelText: 'Fax'),
             ),
           ),
         ),
@@ -200,21 +235,38 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
   }
 
   Widget _buildEmail() {
-    return ListTile(
-      title: TextField(
-        controller: widget.emailController,
-        decoration: InputDecoration(labelText: 'E-Mail'),
-      ),
-      leading: Icon(
-        Icons.contact_mail,
-        color: Colors.blue[500],
+    return Form(
+      key: _formKeyEmail,
+      child: ListTile(
+        title: TextFormField(
+          keyboardType: TextInputType.emailAddress,
+          controller: widget.emailController,
+          decoration: InputDecoration(labelText: 'E-Mail'),
+          onTap: () => _formKeyEmail.currentState.reset(),
+          validator: (value) {
+            if (value.isEmpty) {
+              _validated = false;
+              return 'Eingabe ist erforderlich';
+            } else if (!isEmail(value)) {
+              _validated = false;
+              return 'Ungültige E-Mail Adresse';
+            }
+            _validated = true;
+            return null;
+          },
+        ),
+        leading: Icon(
+          Icons.contact_mail,
+          color: Colors.blue[500],
+        ),
       ),
     );
   }
 
   Widget _buildWeb() {
     return ListTile(
-      title: TextField(
+      title: TextFormField(
+        keyboardType: TextInputType.url,
         controller: widget.webController,
         decoration: InputDecoration(labelText: 'Website'),
       ),
@@ -228,26 +280,31 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
   Widget _buildButtons() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
+      children: [
         FlatButton(
           onPressed: () {
-            widget.customer.name = widget.nameController.text;
-            widget.customer.contact = widget.contactController.text;
-            widget.customer.street = widget.streetController.text;
-            widget.customer.zip = widget.zipController.text;
-            widget.customer.location = widget.locationController.text;
-            widget.customer.phone = widget.phoneController.text;
-            widget.customer.fax = widget.faxController.text;
-            widget.customer.email = widget.emailController.text;
-            widget.customer.web = widget.webController.text;
+            if (_formKeyName.currentState.validate() &&
+                _formKeyPhone.currentState.validate() &&
+                _formKeyEmail.currentState.validate() &&
+                _validated) {
+              widget.customer.name = widget.nameController.text;
+              widget.customer.contact = widget.contactController.text;
+              widget.customer.street = widget.streetController.text;
+              widget.customer.zip = widget.zipController.text;
+              widget.customer.location = widget.locationController.text;
+              widget.customer.phone = widget.phoneController.text;
+              widget.customer.fax = widget.faxController.text;
+              widget.customer.email = widget.emailController.text;
+              widget.customer.web = widget.webController.text;
 
-            if (widget.editCustomer) {
-              DatabaseHelper.updateCustomer(widget.customer);
-            } else {
-              DatabaseHelper.addCustomer(widget.customer);
+              if (widget.editCustomer) {
+                DatabaseHelper.updateCustomer(widget.customer);
+              } else {
+                DatabaseHelper.addCustomer(widget.customer);
+              }
+
+              Navigator.of(context).pop();
             }
-
-            Navigator.of(context).pop();
           },
           child: Text(
             'SPEICHERN',
@@ -276,5 +333,11 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
         radius: 35,
       ),
     );
+  }
+
+  bool isEmail(String value) {
+    return RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(value);
   }
 }
