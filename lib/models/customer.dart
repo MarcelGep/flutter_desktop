@@ -40,4 +40,17 @@ class Customer {
     obj['web'] = web;
     return obj;
   }
+
+  Customer.emptyCustomer() {
+    this.id = "";
+    this.name = "";
+    this.contact = "";
+    this.street = "";
+    this.zip = "";
+    this.location = "";
+    this.phone = "";
+    this.fax = "";
+    this.email = "";
+    this.web = "";
+  }
 }

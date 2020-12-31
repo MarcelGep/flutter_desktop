@@ -5,6 +5,8 @@ import 'package:flutter_desktop/models/customer.dart';
 // ignore: must_be_immutable
 class CustomerEditDialog extends StatefulWidget {
   Customer customer;
+  bool editCustomer = false;
+
   CustomerEditDialog(this.customer);
 
   TextEditingController nameController;
@@ -13,6 +15,7 @@ class CustomerEditDialog extends StatefulWidget {
   TextEditingController zipController;
   TextEditingController locationController;
   TextEditingController phoneController;
+  TextEditingController faxController;
   TextEditingController emailController;
   TextEditingController webController;
 
@@ -24,6 +27,13 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
   @override
   void initState() {
     super.initState();
+
+    if (widget.customer != null) {
+      widget.editCustomer = true;
+    } else {
+      widget.customer = new Customer.emptyCustomer();
+    }
+
     widget.nameController =
         new TextEditingController(text: widget.customer.name);
     widget.contactController =
@@ -35,6 +45,7 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
         new TextEditingController(text: widget.customer.location);
     widget.phoneController =
         new TextEditingController(text: widget.customer.phone);
+    widget.faxController = new TextEditingController(text: widget.customer.fax);
     widget.emailController =
         new TextEditingController(text: widget.customer.email);
     widget.webController = new TextEditingController(text: widget.customer.web);
@@ -74,6 +85,7 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
                       SizedBox(height: 20),
                       Divider(thickness: 1),
                       _buildPhone(),
+                      _buildFax(),
                       _buildEmail(),
                       _buildWeb(),
                     ],
@@ -171,6 +183,22 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
     );
   }
 
+  Widget _buildFax() {
+    return Row(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(left: 72, top: 0, right: 15, bottom: 10),
+            child: TextField(
+              controller: widget.faxController,
+              decoration: InputDecoration(labelText: 'Fax'),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildEmail() {
     return ListTile(
       title: TextField(
@@ -209,9 +237,16 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
             widget.customer.zip = widget.zipController.text;
             widget.customer.location = widget.locationController.text;
             widget.customer.phone = widget.phoneController.text;
+            widget.customer.fax = widget.faxController.text;
             widget.customer.email = widget.emailController.text;
             widget.customer.web = widget.webController.text;
-            DatabaseHelper.updateCustomer(widget.customer);
+
+            if (widget.editCustomer) {
+              DatabaseHelper.updateCustomer(widget.customer);
+            } else {
+              DatabaseHelper.addCustomer(widget.customer);
+            }
+
             Navigator.of(context).pop();
           },
           child: Text(

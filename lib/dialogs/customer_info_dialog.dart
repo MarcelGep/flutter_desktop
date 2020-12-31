@@ -43,6 +43,7 @@ class _CustomerInfoDialogState extends State<CustomerInfoDialog> {
                     _buildLocation(),
                     Divider(thickness: 1),
                     _buildPhone(),
+                    _buildFax(),
                     _buildEmail(),
                     _buildWeb(),
                   ],
@@ -89,6 +90,16 @@ class _CustomerInfoDialogState extends State<CustomerInfoDialog> {
   Widget _buildPhone() {
     return ListTile(
       title: Text(widget.customer.phone),
+      leading: Icon(
+        Icons.contact_phone,
+        color: Colors.blue[500],
+      ),
+    );
+  }
+
+  Widget _buildFax() {
+    return ListTile(
+      title: Text(widget.customer.fax),
       leading: Icon(
         Icons.contact_phone,
         color: Colors.blue[500],

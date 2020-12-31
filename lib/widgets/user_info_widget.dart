@@ -28,7 +28,7 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
     return Row(
       children: [
         Padding(
-          padding: EdgeInsets.only(left: 10.0),
+          padding: EdgeInsets.only(left: 10.0, top: 5, bottom: 5),
           child: CircleAvatar(
             radius: 22,
             backgroundColor: Colors.green,

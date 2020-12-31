@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
 import 'package:flutter_desktop/database/database_helper.dart';
@@ -7,6 +6,7 @@ import 'package:flutter_desktop/helpers/dialog_helper.dart';
 import 'package:flutter_desktop/routes/routes.dart';
 import 'package:flutter_desktop/widgets/bezier_container.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'signup_screen.dart';
 
 class LoginPage extends StatefulWidget {
@@ -25,12 +25,6 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     emailController = TextEditingController(text: "");
     passwordController = TextEditingController(text: "");
-    if (Platform.isIOS) {
-      //check for ios if developing for both android & ios
-      AppleSignIn.onCredentialRevoked.listen((_) {
-        print("Credentials revoked");
-      });
-    }
   }
 
   Widget _entryField(String title, TextEditingController controller,
@@ -95,63 +89,56 @@ class _LoginPageState extends State<LoginPage> {
   Widget _submitButton() {
     return ButtonTheme(
       minWidth: MediaQuery.of(context).size.width,
-      height: 50.0,
+      height: 50,
       buttonColor: Colors.orange[600],
       padding: EdgeInsets.symmetric(vertical: 15),
       child: Builder(
         builder: (context) => RaisedButton(
-            child: Text(
-              'Login',
-              style: TextStyle(fontSize: 18, color: Colors.white),
-            ),
-            onPressed: () async {
-              try {
-                await AuthHelper.signInWithEmail(
-                    email: emailController.text,
-                    password: passwordController.text);
-                Navigator.pushReplacementNamed(context, Routes.customers);
-              } catch (e) {
-                print(e);
-                String errorMessage = e.toString();
-                if (errorMessage.contains('wrong-password'))
-                  errorMessage = "Falsches Password!";
-                if (errorMessage.contains('invalid-email'))
-                  errorMessage = "Ungültige E-Mail Adresse!";
-                if (errorMessage.contains('unknown'))
-                  errorMessage = "Unbekannter Fehler!";
-                if (errorMessage.contains('user-not-found'))
-                  errorMessage = "Benutzer wurde nicht gefunden!";
+          child: Text(
+            'Login',
+            style: TextStyle(fontSize: 22, color: Colors.white),
+          ),
+          onPressed: () async {
+            try {
+              await AuthHelper.signInWithEmail(
+                  email: emailController.text,
+                  password: passwordController.text);
+              Navigator.pushReplacementNamed(context, Routes.customers);
+            } catch (e) {
+              print(e);
+              String errorMessage = e.toString();
+              if (errorMessage.contains('wrong-password'))
+                errorMessage = "Falsches Password!";
+              if (errorMessage.contains('invalid-email'))
+                errorMessage = "Ungültige E-Mail Adresse!";
+              if (errorMessage.contains('unknown'))
+                errorMessage = "Unbekannter Fehler!";
+              if (errorMessage.contains('user-not-found'))
+                errorMessage = "Benutzer wurde nicht gefunden!";
 
-                DialogsHelper.showErrorFlushbar(context, errorMessage);
-              }
-            }),
+              DialogsHelper.showErrorFlushbar(context, errorMessage);
+            }
+          },
+        ),
       ),
     );
   }
 
   Widget _getAppleButton() {
-    return AppleSignInButton(
-        type: ButtonType.continueButton,
-        onPressed: () async {
-          if (await AppleSignIn.isAvailable()) {
-            final AuthorizationResult result =
-                await AppleSignIn.performRequests([
-              AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
-            ]);
-            print(result.status);
-            switch (result.status) {
-              case AuthorizationStatus.authorized:
-                print(result.credential.user);
-                break; //All the required credentials
-              case AuthorizationStatus.error:
-                print("Sign in failed: ${result.error.localizedDescription}");
-                break;
-              case AuthorizationStatus.cancelled:
-                print('User cancelled');
-                break;
-            }
-          }
-        });
+    return SignInWithAppleButton(
+      text: 'Login mit Apple',
+      borderRadius: BorderRadius.all(Radius.circular(0)),
+      height: 50,
+      onPressed: () async {
+        final credential = await SignInWithApple.getAppleIDCredential(
+          scopes: [
+            AppleIDAuthorizationScopes.email,
+            AppleIDAuthorizationScopes.fullName,
+          ],
+        );
+        print(credential);
+      },
+    );
   }
 
   Widget _googleButton() {
@@ -276,8 +263,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     _divider(),
                     SizedBox(height: 20),
-                    //_getAppleButton(),
-                    _googleButton(),
+                    _getAppleButton(),
+                    //_googleButton(),
                     SizedBox(height: 20),
                     _createAccountLabel(),
                   ],
