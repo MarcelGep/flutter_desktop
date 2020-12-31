@@ -323,12 +323,14 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
   }
 
   Widget _buildTopIcon() {
+    IconData topIcon =
+        widget.editCustomer ? Icons.edit : Icons.person_add_alt_1;
     return Positioned(
       left: 20,
       right: 20,
       child: CircleAvatar(
         backgroundColor: Colors.blue,
-        child: Icon(Icons.edit),
+        child: Icon(topIcon, size: 35),
         foregroundColor: Colors.white,
         radius: 35,
       ),
