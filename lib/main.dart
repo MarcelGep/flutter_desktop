@@ -5,6 +5,7 @@ import 'package:flutter_desktop/database/auth_helper.dart';
 import 'package:flutter_desktop/pages/customer_edit_page.dart';
 import 'package:flutter_desktop/pages/login_screen.dart';
 import 'package:flutter_desktop/pages/settings_page.dart';
+import 'package:flutter_desktop/pages/signup_screen.dart';
 import 'package:provider/provider.dart';
 import 'helpers/authentication_wrapper.dart';
 import 'pages/article_page.dart';
@@ -37,6 +38,7 @@ class CustomerMaintenanceApp extends StatelessWidget {
         home: AuthenticationWrapper(),
         routes: {
           Routes.login: (context) => LoginPage(),
+          Routes.signup: (context) => SignUpPage(),
           Routes.customers: (context) => CustomerPage(),
           Routes.invoices: (context) => InvoicePage(),
           Routes.articles: (context) => ArticlePage(),

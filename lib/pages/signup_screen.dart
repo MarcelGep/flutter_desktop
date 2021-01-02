@@ -1,16 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
 import 'package:flutter_desktop/database/database_helper.dart';
 import 'package:flutter_desktop/helpers/dialog_helper.dart';
+import 'package:flutter_desktop/routes/routes.dart';
 import 'package:flutter_desktop/widgets/bezier_container.dart';
-import 'customer_page.dart';
-import 'login_screen.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SignUpPage extends StatefulWidget {
-  SignUpPage({Key key, this.title}) : super(key: key);
-
-  final String title;
+  static const String routeName = '/signup';
 
   @override
   _SignUpPageState createState() => _SignUpPageState();
@@ -20,27 +20,6 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController emailController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
   final TextEditingController usernameController = new TextEditingController();
-
-  Widget _backButton() {
-    return InkWell(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Row(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(left: 0, top: 10, bottom: 10),
-              child: Icon(Icons.keyboard_arrow_left, color: Colors.black),
-            ),
-            Text('Back',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500))
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _entryField(String title, TextEditingController controller,
       {bool isPassword = false}) {
@@ -69,52 +48,58 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget _submitButton() {
-    return ButtonTheme(
-      minWidth: MediaQuery.of(context).size.width,
-      height: 50.0,
-      buttonColor: Colors.orange[600],
-      padding: EdgeInsets.symmetric(vertical: 15),
-      child: Builder(
-        builder: (context) => RaisedButton(
-            child: Text(
-              'Registrieren',
-              style: TextStyle(fontSize: 20, color: Colors.white),
-            ),
-            onPressed: () async {
-              String errorMessage;
+    final RoundedLoadingButtonController _btnController =
+        new RoundedLoadingButtonController();
 
-              if (usernameController.text.isEmpty) {
-                errorMessage = "Bitte Benutzername angeben!";
-              } else {
-                String result = await AuthHelper.signUpWithEmail(
-                    email: emailController.text,
-                    password: passwordController.text);
+    return RoundedLoadingButton(
+      width: MediaQuery.of(context).size.width,
+      color: Colors.orange[600],
+      borderRadius: 0,
+      successColor: Colors.green,
+      child: Text('Registrieren',
+          style: TextStyle(fontSize: 22, color: Colors.white)),
+      controller: _btnController,
+      onPressed: () async {
+        String errorMessage;
 
-                if (result == 'email-already-in-use')
-                  errorMessage = "E-Mail wird bereits verwendet!";
-                if (result == 'invalid-email')
-                  errorMessage = "Ungültige E-Mail Adresse!";
-                if (result == 'unknown') errorMessage = "Unbekannter Fehler!";
-              }
+        if (usernameController.text.isEmpty) {
+          errorMessage = "Bitte Benutzername angeben!";
+        } else {
+          String result = await AuthHelper.signUpWithEmail(
+              email: emailController.text, password: passwordController.text);
+          print(result);
+          if (result == 'email-already-in-use')
+            errorMessage = "E-Mail Adresse wird bereits verwendet";
+          if (result == 'invalid-email')
+            errorMessage = "Ungültige E-Mail Adresse";
+          if (result == 'missing-email')
+            errorMessage = "Keine E-Mail Adresse angegeben";
+          if (result == 'weak-password')
+            errorMessage = "Das Password ist zu unsicher";
+          if (result == 'unknown') errorMessage = "Unbekannter Fehler";
+        }
 
-              if (errorMessage != null) {
-                DialogsHelper.showErrorFlushbar(context, errorMessage);
-              } else {
-                DatabaseHelper.addUserData(usernameController.text);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CustomerPage()));
-              }
-            }),
-      ),
+        if (errorMessage != null) {
+          _btnController.error();
+          passwordController.clear();
+          DialogsHelper.showErrorFlushbar(context, errorMessage);
+          Timer(Duration(milliseconds: 1500), () {
+            _btnController.reset();
+          });
+        } else {
+          _btnController.success();
+          DatabaseHelper.addUserData(usernameController.text);
+          Timer(Duration(milliseconds: 1000), () {
+            Navigator.pushReplacementNamed(context, Routes.customers);
+          });
+        }
+      },
     );
   }
 
   Widget _loginAccountLabel() {
     return InkWell(
-      onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
+      onTap: () => Navigator.pop(context),
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20),
         padding: EdgeInsets.all(15),
@@ -207,7 +192,6 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
-            Positioned(top: 65, left: 0, child: _backButton()),
           ],
         ),
       ),

@@ -9,7 +9,6 @@ import 'package:flutter_desktop/widgets/bezier_container.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'signup_screen.dart';
 
 class LoginPage extends StatefulWidget {
   static const String routeName = '/login';
@@ -94,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
 
     return RoundedLoadingButton(
       width: MediaQuery.of(context).size.width,
-      color: Colors.orange,
+      color: Colors.orange[600],
       borderRadius: 0,
       successColor: Colors.green,
       child: Text('Login', style: TextStyle(fontSize: 22, color: Colors.white)),
@@ -126,35 +125,6 @@ class _LoginPageState extends State<LoginPage> {
           });
         }
       },
-
-      //  RaisedButton(
-      // child: Text(
-      //   'Login',
-      //   style: TextStyle(fontSize: 22, color: Colors.white),
-      // ),
-      //   onPressed: () async {
-      //     try {
-      //       await AuthHelper.signInWithEmail(
-      //           email: emailController.text,
-      //           password: passwordController.text);
-      //       Navigator.pushReplacementNamed(context, Routes.customers);
-      //     } catch (e) {
-      //       print(e);
-      //       String errorMessage = e.toString();
-      //       if (errorMessage.contains('wrong-password'))
-      //         errorMessage = "Falsches Password!";
-      //       if (errorMessage.contains('invalid-email'))
-      //         errorMessage = "Ungültige E-Mail Adresse!";
-      //       if (errorMessage.contains('unknown'))
-      //         errorMessage = "Unbekannter Fehler!";
-      //       if (errorMessage.contains('user-not-found'))
-      //         errorMessage = "Benutzer wurde nicht gefunden!";
-
-      //       DialogsHelper.showErrorFlushbar(context, errorMessage);
-      //     }
-      //   },
-      // ),
-      // ),
     );
   }
 
@@ -204,10 +174,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _createAccountLabel() {
     return InkWell(
-      onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SignUpPage()));
-      },
+      onTap: () => Navigator.pushNamed(context, Routes.signup),
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20),
         padding: EdgeInsets.all(15),
