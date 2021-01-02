@@ -3,11 +3,8 @@ import 'package:flutter_desktop/database/database_helper.dart';
 import 'package:flutter_desktop/models/customer.dart';
 
 // ignore: must_be_immutable
-class CustomerEditDialog extends StatefulWidget {
-  Customer customer;
-  bool editCustomer = false;
-
-  CustomerEditDialog(this.customer);
+class CustomerEditPage extends StatefulWidget {
+  static const String routeName = '/customerEditPage';
 
   TextEditingController nameController;
   TextEditingController contactController;
@@ -20,90 +17,94 @@ class CustomerEditDialog extends StatefulWidget {
   TextEditingController webController;
 
   @override
-  _CustomerEditDialogState createState() => _CustomerEditDialogState();
+  _CustomerEditPageState createState() => _CustomerEditPageState();
 }
 
-class _CustomerEditDialogState extends State<CustomerEditDialog> {
+class _CustomerEditPageState extends State<CustomerEditPage> {
   final _formKeyName = GlobalKey<FormState>();
   final _formKeyPhone = GlobalKey<FormState>();
   final _formKeyEmail = GlobalKey<FormState>();
 
   bool _validated = true;
+  bool _editCustomer = false;
+  Customer _customer;
 
-  @override
-  void initState() {
-    super.initState();
+  void initCustomerData() {
+    _customer = ModalRoute.of(context).settings.arguments;
 
-    if (widget.customer != null) {
-      widget.editCustomer = true;
+    if (_customer != null) {
+      _editCustomer = true;
     } else {
-      widget.customer = new Customer.emptyCustomer();
+      _customer = new Customer.emptyCustomer();
     }
 
-    widget.nameController =
-        new TextEditingController(text: widget.customer.name);
+    widget.nameController = new TextEditingController(text: _customer.name);
     widget.contactController =
-        new TextEditingController(text: widget.customer.contact);
-    widget.streetController =
-        new TextEditingController(text: widget.customer.street);
-    widget.zipController = new TextEditingController(text: widget.customer.zip);
+        new TextEditingController(text: _customer.contact);
+    widget.streetController = new TextEditingController(text: _customer.street);
+    widget.zipController = new TextEditingController(text: _customer.zip);
     widget.locationController =
-        new TextEditingController(text: widget.customer.location);
-    widget.phoneController =
-        new TextEditingController(text: widget.customer.phone);
-    widget.faxController = new TextEditingController(text: widget.customer.fax);
-    widget.emailController =
-        new TextEditingController(text: widget.customer.email);
-    widget.webController = new TextEditingController(text: widget.customer.web);
+        new TextEditingController(text: _customer.location);
+    widget.phoneController = new TextEditingController(text: _customer.phone);
+    widget.faxController = new TextEditingController(text: _customer.fax);
+    widget.emailController = new TextEditingController(text: _customer.email);
+    widget.webController = new TextEditingController(text: _customer.web);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      backgroundColor: Colors.transparent,
-      child: Stack(
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: 0, top: 35, right: 0, bottom: 10),
-            margin: EdgeInsets.only(top: 35),
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
-              ],
+    initCustomerData();
+    return new Scaffold(
+      appBar: AppBar(
+        leadingWidth: 120,
+        leading: FlatButton(
+          onPressed: () => Navigator.pop(context),
+          child: Row(
+            children: [
+              Icon(Icons.arrow_back_ios, size: 18, color: Colors.white),
+              Text('Kunden',
+                  style: TextStyle(fontSize: 16, color: Colors.white)),
+            ],
+          ),
+        ),
+        title: Text(
+          _editCustomer ? 'Bearbeiten' : 'Neuer Kunde',
+          style: TextStyle(color: Colors.indigo[900], fontSize: 20),
+        ),
+        centerTitle: true,
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () => applyCustomer(),
+            child: Text(
+              _editCustomer ? 'Speichern' : 'Erstellen',
+              style: TextStyle(color: Colors.white, fontSize: 16),
             ),
-            child: SingleChildScrollView(
-              child: Column(
+          )
+        ],
+      ),
+      body: Container(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+              _buildName(),
+              SizedBox(height: 30),
+              Column(
                 children: [
-                  _buildName(),
-                  SizedBox(height: 15),
-                  Column(
-                    children: [
-                      _buildContact(),
-                      _buildStreet(),
-                      _buildLocation(),
-                      SizedBox(height: 20),
-                      Divider(thickness: 1),
-                      _buildPhone(),
-                      _buildFax(),
-                      _buildEmail(),
-                      _buildWeb(),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  _buildButtons(),
+                  _buildContact(),
+                  _buildStreet(),
+                  _buildLocation(),
+                  SizedBox(height: 20),
+                  Divider(thickness: 1),
+                  _buildPhone(),
+                  _buildFax(),
+                  _buildEmail(),
+                  _buildWeb(),
                 ],
               ),
-            ),
+            ],
           ),
-          _buildTopIcon(),
-        ],
+        ),
       ),
     );
   }
@@ -277,64 +278,28 @@ class _CustomerEditDialogState extends State<CustomerEditDialog> {
     );
   }
 
-  Widget _buildButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        FlatButton(
-          onPressed: () {
-            if (_formKeyName.currentState.validate() &&
-                _formKeyPhone.currentState.validate() &&
-                _formKeyEmail.currentState.validate() &&
-                _validated) {
-              widget.customer.name = widget.nameController.text;
-              widget.customer.contact = widget.contactController.text;
-              widget.customer.street = widget.streetController.text;
-              widget.customer.zip = widget.zipController.text;
-              widget.customer.location = widget.locationController.text;
-              widget.customer.phone = widget.phoneController.text;
-              widget.customer.fax = widget.faxController.text;
-              widget.customer.email = widget.emailController.text;
-              widget.customer.web = widget.webController.text;
+  bool applyCustomer() {
+    if (_formKeyName.currentState.validate() &&
+        _formKeyPhone.currentState.validate() &&
+        _formKeyEmail.currentState.validate() &&
+        _validated) {
+      _customer.name = widget.nameController.text;
+      _customer.contact = widget.contactController.text;
+      _customer.street = widget.streetController.text;
+      _customer.zip = widget.zipController.text;
+      _customer.location = widget.locationController.text;
+      _customer.phone = widget.phoneController.text;
+      _customer.fax = widget.faxController.text;
+      _customer.email = widget.emailController.text;
+      _customer.web = widget.webController.text;
 
-              if (widget.editCustomer) {
-                DatabaseHelper.updateCustomer(widget.customer);
-              } else {
-                DatabaseHelper.addCustomer(widget.customer);
-              }
-
-              Navigator.of(context).pop();
-            }
-          },
-          child: Text(
-            'SPEICHERN',
-            style: TextStyle(fontSize: 16, color: Colors.blue),
-          ),
-        ),
-        FlatButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(
-            'ABBRECHEN',
-            style: TextStyle(fontSize: 16, color: Colors.blue),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTopIcon() {
-    IconData topIcon =
-        widget.editCustomer ? Icons.edit : Icons.person_add_alt_1;
-    return Positioned(
-      left: 20,
-      right: 20,
-      child: CircleAvatar(
-        backgroundColor: Colors.blue,
-        child: Icon(topIcon, size: 35),
-        foregroundColor: Colors.white,
-        radius: 35,
-      ),
-    );
+      if (_editCustomer) {
+        DatabaseHelper.updateCustomer(_customer);
+      } else {
+        DatabaseHelper.addCustomer(_customer);
+      }
+      Navigator.pop(context);
+    }
   }
 
   bool isEmail(String value) {

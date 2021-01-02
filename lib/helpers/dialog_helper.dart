@@ -1,6 +1,6 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_desktop/dialogs/customer_edit_dialog.dart';
+import 'package:flutter_desktop/pages/customer_edit_page.dart';
 import 'package:flutter_desktop/dialogs/customer_info_dialog.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -8,15 +8,6 @@ import '../models/customer.dart';
 import '../database/database_helper.dart';
 
 class DialogsHelper {
-  static void openEditCustomerDialog(BuildContext context, Customer customer) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CustomerEditDialog(customer);
-      },
-    );
-  }
-
   static void openCustomerInfoDialog(BuildContext context, Customer customer) {
     showDialog(
       context: context,

@@ -1,3 +1,4 @@
+import 'package:flutter_desktop/pages/customer_edit_page.dart';
 import 'package:flutter_desktop/pages/article_page.dart';
 import 'package:flutter_desktop/pages/customer_page.dart';
 import 'package:flutter_desktop/pages/invoice_page.dart';
@@ -11,4 +12,5 @@ class Routes {
   static const String invoices = InvoicePage.routeName;
   static const String articles = ArticlePage.routeName;
   static const String settings = SettingsPage.routeName;
+  static const String customerEdit = CustomerEditPage.routeName;
 }
