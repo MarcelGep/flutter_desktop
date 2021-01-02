@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
-import 'package:flutter_desktop/database/database_helper.dart';
 import 'package:flutter_desktop/helpers/dialog_helper.dart';
 import 'package:flutter_desktop/routes/routes.dart';
 import 'package:flutter_desktop/widgets/bezier_container.dart';
@@ -145,32 +144,32 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _googleButton() {
-    return RaisedButton(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Image(
-            image: AssetImage('images/google-logo.png'),
-            height: 50,
-          ),
-          Text(
-            'Login mit Google',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18, color: Colors.grey[700]),
-          ),
-        ],
-      ),
-      onPressed: () {
-        AuthHelper.signInWithGoogle().then((result) {
-          if (result != null) {
-            DatabaseHelper.addUserData(null);
-            Navigator.pushReplacementNamed(context, Routes.customers);
-          }
-        });
-      },
-    );
-  }
+  // Widget _googleButton() {
+  //   return RaisedButton(
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: <Widget>[
+  //         Image(
+  //           image: AssetImage('images/google-logo.png'),
+  //           height: 50,
+  //         ),
+  //         Text(
+  //           'Login mit Google',
+  //           textAlign: TextAlign.center,
+  //           style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+  //         ),
+  //       ],
+  //     ),
+  //     onPressed: () {
+  //       AuthHelper.signInWithGoogle().then((result) {
+  //         if (result != null) {
+  //           DatabaseHelper.addUserData(null);
+  //           Navigator.pushReplacementNamed(context, Routes.customers);
+  //         }
+  //       });
+  //     },
+  //   );
+  // }
 
   Widget _createAccountLabel() {
     return InkWell(

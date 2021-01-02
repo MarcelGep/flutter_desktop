@@ -281,7 +281,7 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
     );
   }
 
-  bool applyCustomer() {
+  void applyCustomer() {
     if (_formKeyName.currentState.validate() &&
         _formKeyPhone.currentState.validate() &&
         _formKeyEmail.currentState.validate() &&

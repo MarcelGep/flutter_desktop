@@ -1,6 +1,5 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_desktop/pages/customer_edit_page.dart';
 import 'package:flutter_desktop/dialogs/customer_info_dialog.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 

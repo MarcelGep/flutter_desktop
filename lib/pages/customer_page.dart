@@ -1,8 +1,4 @@
-import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_desktop/database/database_helper.dart';
-import 'package:flutter_desktop/helpers/dialog_helper.dart';
-import 'package:flutter_desktop/models/customer.dart';
 import 'package:flutter_desktop/routes/routes.dart';
 import 'package:flutter_desktop/widgets/app_drawer.dart';
 import 'package:flutter_desktop/widgets/customer_list.dart';
