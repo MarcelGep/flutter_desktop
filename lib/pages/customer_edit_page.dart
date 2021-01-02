@@ -56,20 +56,23 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
     initCustomerData();
     return new Scaffold(
       appBar: AppBar(
-        leadingWidth: 120,
+        leadingWidth: 123,
         leading: FlatButton(
           onPressed: () => Navigator.pop(context),
           child: Row(
             children: [
-              Icon(Icons.arrow_back_ios, size: 18, color: Colors.white),
-              Text('Kunden',
-                  style: TextStyle(fontSize: 16, color: Colors.white)),
+              Icon(Icons.arrow_back_ios, size: 24, color: Colors.black87),
+              Text(
+                'Kunden',
+                style: TextStyle(fontSize: 18, color: Colors.black87),
+              ),
             ],
           ),
         ),
-        title: Text(
-          _editCustomer ? 'Bearbeiten' : 'Neuer Kunde',
-          style: TextStyle(color: Colors.indigo[900], fontSize: 20),
+        title: Icon(
+          _editCustomer ? Icons.mode_outlined : Icons.person_add,
+          size: 35,
+          color: Colors.black87,
         ),
         centerTitle: true,
         actions: <Widget>[
@@ -77,7 +80,7 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
             onPressed: () => applyCustomer(),
             child: Text(
               _editCustomer ? 'Speichern' : 'Erstellen',
-              style: TextStyle(color: Colors.white, fontSize: 16),
+              style: TextStyle(color: Colors.black87, fontSize: 18),
             ),
           )
         ],

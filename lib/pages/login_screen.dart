@@ -1,4 +1,5 @@
-import 'dart:io';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
 import 'package:flutter_desktop/database/database_helper.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_desktop/helpers/dialog_helper.dart';
 import 'package:flutter_desktop/routes/routes.dart';
 import 'package:flutter_desktop/widgets/bezier_container.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'signup_screen.dart';
 
@@ -23,8 +25,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    emailController = TextEditingController(text: "");
-    passwordController = TextEditingController(text: "");
+    emailController = TextEditingController(text: "marcel@todo.de");
+    passwordController = TextEditingController(text: "marcel");
   }
 
   Widget _entryField(String title, TextEditingController controller,
@@ -87,40 +89,72 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _submitButton() {
-    return ButtonTheme(
-      minWidth: MediaQuery.of(context).size.width,
-      height: 50,
-      buttonColor: Colors.orange[600],
-      padding: EdgeInsets.symmetric(vertical: 15),
-      child: Builder(
-        builder: (context) => RaisedButton(
-          child: Text(
-            'Login',
-            style: TextStyle(fontSize: 22, color: Colors.white),
-          ),
-          onPressed: () async {
-            try {
-              await AuthHelper.signInWithEmail(
-                  email: emailController.text,
-                  password: passwordController.text);
-              Navigator.pushReplacementNamed(context, Routes.customers);
-            } catch (e) {
-              print(e);
-              String errorMessage = e.toString();
-              if (errorMessage.contains('wrong-password'))
-                errorMessage = "Falsches Password!";
-              if (errorMessage.contains('invalid-email'))
-                errorMessage = "Ungültige E-Mail Adresse!";
-              if (errorMessage.contains('unknown'))
-                errorMessage = "Unbekannter Fehler!";
-              if (errorMessage.contains('user-not-found'))
-                errorMessage = "Benutzer wurde nicht gefunden!";
+    final RoundedLoadingButtonController _btnController =
+        new RoundedLoadingButtonController();
 
-              DialogsHelper.showErrorFlushbar(context, errorMessage);
-            }
-          },
-        ),
-      ),
+    return RoundedLoadingButton(
+      width: MediaQuery.of(context).size.width,
+      color: Colors.orange,
+      borderRadius: 0,
+      successColor: Colors.green,
+      child: Text('Login', style: TextStyle(fontSize: 22, color: Colors.white)),
+      controller: _btnController,
+      onPressed: () async {
+        try {
+          await AuthHelper.signInWithEmail(
+              email: emailController.text, password: passwordController.text);
+          _btnController.success();
+          Timer(Duration(milliseconds: 1000), () {
+            Navigator.pushReplacementNamed(context, Routes.customers);
+          });
+        } catch (e) {
+          _btnController.error();
+          print(e);
+          String errorMessage = e.toString();
+          if (errorMessage.contains('wrong-password'))
+            errorMessage = "Falsches Password!";
+          if (errorMessage.contains('invalid-email'))
+            errorMessage = "Ungültige E-Mail Adresse!";
+          if (errorMessage.contains('unknown'))
+            errorMessage = "Unbekannter Fehler!";
+          if (errorMessage.contains('user-not-found'))
+            errorMessage = "Benutzer wurde nicht gefunden!";
+
+          DialogsHelper.showErrorFlushbar(context, errorMessage);
+          Timer(Duration(milliseconds: 1500), () {
+            _btnController.reset();
+          });
+        }
+      },
+
+      //  RaisedButton(
+      // child: Text(
+      //   'Login',
+      //   style: TextStyle(fontSize: 22, color: Colors.white),
+      // ),
+      //   onPressed: () async {
+      //     try {
+      //       await AuthHelper.signInWithEmail(
+      //           email: emailController.text,
+      //           password: passwordController.text);
+      //       Navigator.pushReplacementNamed(context, Routes.customers);
+      //     } catch (e) {
+      //       print(e);
+      //       String errorMessage = e.toString();
+      //       if (errorMessage.contains('wrong-password'))
+      //         errorMessage = "Falsches Password!";
+      //       if (errorMessage.contains('invalid-email'))
+      //         errorMessage = "Ungültige E-Mail Adresse!";
+      //       if (errorMessage.contains('unknown'))
+      //         errorMessage = "Unbekannter Fehler!";
+      //       if (errorMessage.contains('user-not-found'))
+      //         errorMessage = "Benutzer wurde nicht gefunden!";
+
+      //       DialogsHelper.showErrorFlushbar(context, errorMessage);
+      //     }
+      //   },
+      // ),
+      // ),
     );
   }
 

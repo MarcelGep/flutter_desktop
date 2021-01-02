@@ -42,7 +42,8 @@ dependencies:
   percent_indicator: ^2.1.8
   random_color: ^1.0.5
   sign_in_with_apple: ^2.5.4
-  
+  rounded_loading_button: ^1.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

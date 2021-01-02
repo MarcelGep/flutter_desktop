@@ -31,14 +31,14 @@ class CustomerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text("Kunden", style: TextStyle(color: Colors.indigo[900])),
+        title: Text("Kunden", style: TextStyle(color: Colors.black87)),
         actions: <Widget>[
           FlatButton(
             onPressed: () =>
                 //_addCustomer(),
                 Navigator.pushNamed(context, Routes.customerEdit,
                     arguments: null),
-            child: Icon(Icons.add, color: Colors.white),
+            child: Icon(Icons.add, color: Colors.black87),
           )
         ],
       ),

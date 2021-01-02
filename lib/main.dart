@@ -31,7 +31,7 @@ class CustomerMaintenanceApp extends StatelessWidget {
         showPerformanceOverlay: false,
         title: 'KundenVerwaltungsApp',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.lightBlue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: AuthenticationWrapper(),
