@@ -82,7 +82,7 @@ class _SignUpPageState extends State<SignUpPage> {
         if (errorMessage != null) {
           _btnController.error();
           passwordController.clear();
-          DialogsHelper.showErrorFlushbar(context, errorMessage);
+          DialogsHelper.showErrorFlushbar(context, errorMessage, 1500);
           Timer(Duration(milliseconds: 1500), () {
             _btnController.reset();
           });

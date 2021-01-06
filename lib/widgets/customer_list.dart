@@ -113,7 +113,7 @@ class CustomerList extends StatelessWidget {
                                 //Delete button
                                 DatabaseHelper.deleteCustomer(customer);
                                 DialogsHelper.showDeleteFlushbar(
-                                    context, customer);
+                                    context, customer, 2000);
                                 break;
                             }
                           },
@@ -155,7 +155,8 @@ class CustomerList extends StatelessWidget {
                         icon: Icons.delete,
                         onTap: () {
                           DatabaseHelper.deleteCustomer(customer);
-                          DialogsHelper.showDeleteFlushbar(context, customer);
+                          DialogsHelper.showDeleteFlushbar(
+                              context, customer, 2000);
                         },
                       ),
                     ],

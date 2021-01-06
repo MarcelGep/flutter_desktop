@@ -1,6 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/dialogs/customer_info_dialog.dart';
+import 'package:flutter_desktop/widgets/TextCounter.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../models/customer.dart';
@@ -16,30 +17,45 @@ class DialogsHelper {
     );
   }
 
-  static void showDeleteFlushbar(BuildContext context, Customer customer) {
-    int durationMs = 1500;
+  void startTimer() {}
+
+  static void showDeleteFlushbar(
+      BuildContext context, Customer customer, int durationMs) {
     Flushbar<List<String>> flush;
     flush = Flushbar<List<String>>(
+      flushbarStyle: FlushbarStyle.GROUNDED,
       showProgressIndicator: false,
       animationDuration: Duration(milliseconds: 500),
       duration: Duration(milliseconds: durationMs),
       shouldIconPulse: false,
-      leftBarIndicatorColor: Colors.red,
-      messageText: Text(
-        "Kunde wurde gelöscht!",
-        style: TextStyle(color: Colors.red),
+      titleText: Text(
+        customer.name,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: Colors.red,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
       ),
-      icon: Icon(Icons.delete_outline, color: Colors.red),
+      messageText: Text(
+        'wurde gelöscht',
+        style: TextStyle(
+          color: Colors.red,
+          fontSize: 14,
+        ),
+      ),
+      icon: Icon(
+        Icons.delete_outline,
+        color: Colors.red,
+        size: 45,
+      ),
       mainButton: FlatButton(
         child: Row(
           children: [
-            Text(
-              "RÜCKGÄNGIG",
-              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-            ),
+            Icon(Icons.undo, color: Colors.blue, size: 28),
             SizedBox(width: 8),
             CircularPercentIndicator(
-              radius: 25.0,
+              radius: 46.0,
               animation: true,
               animationDuration: durationMs,
               lineWidth: 4.0,
@@ -47,6 +63,7 @@ class DialogsHelper {
               circularStrokeCap: CircularStrokeCap.round,
               backgroundColor: Colors.grey[800],
               progressColor: Colors.blue,
+              center: TextCounter(duration: (durationMs / 1000).round()),
             ),
           ],
         ),
@@ -58,11 +75,12 @@ class DialogsHelper {
     )..show(context);
   }
 
-  static void showErrorFlushbar(BuildContext context, String text) {
+  static void showErrorFlushbar(
+      BuildContext context, String text, int durationMs) {
     Flushbar<List<String>>(
       backgroundColor: Colors.red,
       shouldIconPulse: false,
-      duration: Duration(milliseconds: 1500),
+      duration: Duration(seconds: durationMs),
       messageText: Text(text, style: TextStyle(color: Colors.white)),
       icon: Icon(IconData(0xead6, fontFamily: 'MaterialIcons'),
           color: Colors.white),

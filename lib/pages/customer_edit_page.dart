@@ -28,6 +28,7 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
   bool _validated = true;
   bool _editCustomer = false;
   Customer _customer;
+  double _space = 25;
 
   void initCustomerData() {
     _customer = ModalRoute.of(context).settings.arguments;
@@ -89,21 +90,42 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 20),
-              _buildName(),
-              SizedBox(height: 30),
-              Column(
-                children: [
-                  _buildContact(),
-                  _buildStreet(),
-                  _buildLocation(),
-                  SizedBox(height: 20),
-                  Divider(thickness: 1),
-                  _buildPhone(),
-                  _buildFax(),
-                  _buildEmail(),
-                  _buildWeb(),
-                ],
+              Card(
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                elevation: 5,
+                margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+                child: Padding(
+                  padding: EdgeInsets.only(top: 10, bottom: 25),
+                  child: Column(
+                    children: [
+                      _buildCompany(),
+                      _buildContact(),
+                      _buildLocation(),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 15),
+              Card(
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                elevation: 5,
+                margin: EdgeInsets.only(top: 10, left: 20, right: 20),
+                child: Padding(
+                  padding: EdgeInsets.only(top: 10, bottom: 25),
+                  child: Column(
+                    children: [
+                      _buildPhone(),
+                      _buildEmail(),
+                      _buildWeb(),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
@@ -112,171 +134,208 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
     );
   }
 
-  Widget _buildName() {
+  Widget _buildCompany() {
     return Form(
       key: _formKeyName,
       child: Container(
-        padding: EdgeInsets.only(left: 18, top: 0, right: 18, bottom: 0),
-        child: TextFormField(
-          controller: widget.nameController,
-          decoration: InputDecoration(
-            labelText: 'Firma',
-            labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-          ),
-          style: TextStyle(fontWeight: FontWeight.w600),
-          onChanged: (value) => _formKeyName.currentState.validate(),
-          validator: (value) {
-            if (value.isEmpty) {
-              _validated = false;
-              return 'Eingabe erforderlich';
-            }
-            _validated = true;
-            return null;
-          },
+        padding: EdgeInsets.only(left: 10, right: 30, bottom: _space),
+        child: Row(
+          children: [
+            Icon(Icons.home_work, color: Colors.blue[500]),
+            SizedBox(width: 20),
+            Expanded(
+              child: TextFormField(
+                controller: widget.nameController,
+                decoration: InputDecoration(
+                  labelText: 'Firma',
+                  labelStyle:
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                ),
+                style: TextStyle(fontWeight: FontWeight.w600),
+                onChanged: (value) => _formKeyName.currentState.validate(),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    _validated = false;
+                    return 'Eingabe erforderlich';
+                  }
+                  _validated = true;
+                  return null;
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   Widget _buildContact() {
-    return ListTile(
-      title: TextFormField(
-        controller: widget.contactController,
-        decoration: InputDecoration(labelText: 'Kontakt'),
-      ),
-      leading: Icon(
-        Icons.perm_contact_cal,
-        color: Colors.blue[500],
-      ),
-    );
-  }
-
-  Widget _buildStreet() {
-    return ListTile(
-      title: TextFormField(
-        keyboardType: TextInputType.streetAddress,
-        controller: widget.streetController,
-        decoration: InputDecoration(labelText: 'Straße'),
-      ),
-      leading: Icon(
-        Icons.location_on,
-        color: Colors.blue[500],
+    return Container(
+      padding: EdgeInsets.only(left: 10, right: 30, bottom: _space),
+      child: Row(
+        children: [
+          Icon(Icons.perm_contact_cal, color: Colors.blue[500]),
+          SizedBox(width: 20),
+          Expanded(
+            child: TextFormField(
+              keyboardType: TextInputType.streetAddress,
+              controller: widget.contactController,
+              decoration: InputDecoration(labelText: 'Kontakt'),
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildLocation() {
-    return Row(
-      children: [
-        Expanded(
-          child: ListTile(
-            title: TextFormField(
-              keyboardType: TextInputType.number,
-              maxLength: 5,
-              decoration: InputDecoration(counterText: '', labelText: 'PLZ'),
-              controller: widget.zipController,
-            ),
-            contentPadding:
-                EdgeInsets.only(left: 71, top: 0, right: 10, bottom: 0),
+    return Container(
+      padding: EdgeInsets.only(left: 10, right: 30),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Icon(Icons.location_on, color: Colors.blue[500]),
+              SizedBox(width: 20),
+              Expanded(
+                child: TextFormField(
+                  keyboardType: TextInputType.streetAddress,
+                  controller: widget.streetController,
+                  decoration: InputDecoration(labelText: 'Straße'),
+                ),
+              ),
+            ],
           ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(left: 0, top: 0, right: 15, bottom: 0),
-            child: TextFormField(
-              controller: widget.locationController,
-              decoration: InputDecoration(labelText: 'Ort'),
-            ),
+          Row(
+            children: [
+              SizedBox(width: 45),
+              Expanded(
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  maxLength: 5,
+                  decoration:
+                      InputDecoration(counterText: '', labelText: 'PLZ'),
+                  controller: widget.zipController,
+                ),
+              ),
+              SizedBox(width: 30),
+              Expanded(
+                flex: 3,
+                child: TextFormField(
+                  controller: widget.locationController,
+                  decoration: InputDecoration(labelText: 'Ort'),
+                ),
+              ),
+            ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Widget _buildPhone() {
-    return Form(
-      key: _formKeyPhone,
-      child: ListTile(
-        title: TextFormField(
-          keyboardType: TextInputType.phone,
-          maxLength: 15,
-          decoration: InputDecoration(counterText: '', labelText: 'Telefon'),
-          controller: widget.phoneController,
-          onChanged: (value) => _formKeyPhone.currentState.validate(),
-          validator: (value) {
-            if (value.isEmpty) {
-              _validated = false;
-              return 'Eingabe erforderlich';
-            }
-            _validated = true;
-            return null;
-          },
-        ),
-        leading: Icon(
-          Icons.contact_phone,
-          color: Colors.blue[500],
+    return Container(
+      padding: EdgeInsets.only(left: 10, right: 30, bottom: _space),
+      child: Form(
+        key: _formKeyPhone,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Icon(Icons.contact_phone, color: Colors.blue[500]),
+                SizedBox(width: 20),
+                Expanded(
+                  child: TextFormField(
+                    keyboardType: TextInputType.phone,
+                    maxLength: 15,
+                    decoration:
+                        InputDecoration(counterText: '', labelText: 'Telefon'),
+                    controller: widget.phoneController,
+                    onChanged: (value) => _formKeyPhone.currentState.validate(),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        _validated = false;
+                        return 'Eingabe erforderlich';
+                      }
+                      _validated = true;
+                      return null;
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                SizedBox(width: 45),
+                Expanded(
+                  child: TextFormField(
+                    keyboardType: TextInputType.phone,
+                    maxLength: 15,
+                    controller: widget.faxController,
+                    decoration:
+                        InputDecoration(counterText: '', labelText: 'Fax'),
+                  ),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildFax() {
-    return Row(
-      children: [
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(left: 72, top: 0, right: 15, bottom: 10),
-            child: TextFormField(
-              keyboardType: TextInputType.phone,
-              maxLength: 15,
-              controller: widget.faxController,
-              decoration: InputDecoration(counterText: '', labelText: 'Fax'),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildEmail() {
-    return Form(
-      key: _formKeyEmail,
-      child: ListTile(
-        title: TextFormField(
-          keyboardType: TextInputType.emailAddress,
-          controller: widget.emailController,
-          decoration: InputDecoration(labelText: 'E-Mail'),
-          onTap: () => _formKeyEmail.currentState.reset(),
-          validator: (value) {
-            if (value.isEmpty) {
-              _validated = false;
-              return 'Eingabe ist erforderlich';
-            } else if (!isEmail(value)) {
-              _validated = false;
-              return 'Ungültige E-Mail Adresse';
-            }
-            _validated = true;
-            return null;
-          },
-        ),
-        leading: Icon(
-          Icons.contact_mail,
-          color: Colors.blue[500],
+    return Container(
+      padding: EdgeInsets.only(left: 10, right: 30, bottom: _space),
+      child: Form(
+        key: _formKeyEmail,
+        child: Row(
+          children: [
+            Icon(Icons.contact_mail, color: Colors.blue[500]),
+            SizedBox(width: 20),
+            Expanded(
+              child: TextFormField(
+                keyboardType: TextInputType.emailAddress,
+                controller: widget.emailController,
+                decoration: InputDecoration(labelText: 'E-Mail'),
+                onTap: () => _formKeyEmail.currentState.reset(),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    _validated = false;
+                    return 'Eingabe ist erforderlich';
+                  } else if (!isEmail(value)) {
+                    _validated = false;
+                    return 'Ungültige E-Mail Adresse';
+                  }
+                  _validated = true;
+                  return null;
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   Widget _buildWeb() {
-    return ListTile(
-      title: TextFormField(
-        keyboardType: TextInputType.url,
-        controller: widget.webController,
-        decoration: InputDecoration(labelText: 'Website'),
-      ),
-      leading: Icon(
-        Icons.language,
-        color: Colors.blue[500],
+    return Container(
+      padding: EdgeInsets.only(left: 10, right: 30),
+      child: Row(
+        children: [
+          Icon(
+            Icons.language,
+            color: Colors.blue[500],
+          ),
+          SizedBox(width: 20),
+          Expanded(
+            child: TextFormField(
+              keyboardType: TextInputType.url,
+              controller: widget.webController,
+              decoration: InputDecoration(labelText: 'Website'),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -118,8 +118,9 @@ class _LoginPageState extends State<LoginPage> {
           if (errorMessage.contains('user-not-found'))
             errorMessage = "Benutzer wurde nicht gefunden!";
 
-          DialogsHelper.showErrorFlushbar(context, errorMessage);
-          Timer(Duration(milliseconds: 1500), () {
+          int durationMs = 1500;
+          DialogsHelper.showErrorFlushbar(context, errorMessage, durationMs);
+          Timer(Duration(milliseconds: durationMs), () {
             _btnController.reset();
           });
         }
