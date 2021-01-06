@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:faker/faker.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
 import 'package:flutter_desktop/models/customer.dart';
 import 'package:flutter_desktop/models/users.dart';
@@ -26,6 +27,23 @@ class DatabaseHelper {
     String userId = AuthHelper.getCurrentUserId();
     DocumentSnapshot snapshot = await _users.doc(userId).get();
     return new User.fromJson(userId, snapshot.data());
+  }
+
+  static addRandomCustomer() {
+    var faker = new Faker();
+    Customer newCustomer = new Customer(
+        null,
+        faker.internet.userName(),
+        faker.person.name(),
+        "Muster Str. 12",
+        "89323",
+        "Musterstadt",
+        "0123456789",
+        "0123456789",
+        faker.internet.email(),
+        "www." + faker.internet.userName() + ".de");
+
+    DatabaseHelper.addCustomer(newCustomer);
   }
 
   static addCustomer(Customer customer) {
