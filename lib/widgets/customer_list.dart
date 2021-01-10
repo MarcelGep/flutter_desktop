@@ -103,7 +103,7 @@ class CustomerList extends StatelessWidget {
                                 //Edit button
                                 Navigator.pushNamed(
                                   context,
-                                  Routes.customerEdit,
+                                  Routes.customerInfo,
                                   arguments: customer,
                                 );
                                 break;
@@ -120,8 +120,13 @@ class CustomerList extends StatelessWidget {
                         subtitle: Text(
                           customer.email,
                         ),
-                        onTap: () => DialogsHelper.openCustomerInfoDialog(
-                            context, customer),
+                        onTap: () => Navigator.pushNamed(
+                          context,
+                          Routes.customerInfo,
+                          arguments: customer,
+                        ),
+                        //  DialogsHelper.openCustomerInfoDialog(
+                        //     context, customer),
                       ),
                     ),
                     actions: <Widget>[
@@ -142,7 +147,7 @@ class CustomerList extends StatelessWidget {
                         onTap: () {
                           Navigator.pushNamed(
                             context,
-                            Routes.customerEdit,
+                            Routes.customerInfo,
                             arguments: customer,
                           );
                         },

@@ -24,7 +24,7 @@ class _CustomerPageState extends State<CustomerPage> {
             child: Icon(Icons.add_box, color: Colors.grey[850]),
           ),
           FlatButton(
-            onPressed: () => Navigator.pushNamed(context, Routes.customerEdit,
+            onPressed: () => Navigator.pushNamed(context, Routes.customerInfo,
                 arguments: null),
             child: Icon(Icons.add, color: Colors.grey[850]),
           )

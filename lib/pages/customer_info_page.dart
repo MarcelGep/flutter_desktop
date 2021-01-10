@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/database_helper.dart';
 import 'package:flutter_desktop/models/customer.dart';
-import 'package:flutter_desktop/widgets/customer_list.dart';
 
 // ignore: must_be_immutable
-class CustomerEditPage extends StatefulWidget {
-  static const String routeName = '/customerEditPage';
+class CustomerInfoPage extends StatefulWidget {
+  static const String routeName = '/customerInfoPage';
 
   TextEditingController nameController;
   TextEditingController contactController;
@@ -18,10 +17,10 @@ class CustomerEditPage extends StatefulWidget {
   TextEditingController webController;
 
   @override
-  _CustomerEditPageState createState() => _CustomerEditPageState();
+  _CustomerInfoPageState createState() => _CustomerInfoPageState();
 }
 
-class _CustomerEditPageState extends State<CustomerEditPage> {
+class _CustomerInfoPageState extends State<CustomerInfoPage> {
   final _formKeyName = GlobalKey<FormState>();
   final _formKeyPhone = GlobalKey<FormState>();
   final _formKeyEmail = GlobalKey<FormState>();
@@ -71,11 +70,6 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
             ],
           ),
         ),
-        title: Icon(
-          _editCustomer ? Icons.mode_outlined : Icons.person_add,
-          size: 35,
-          color: Colors.grey[850],
-        ),
         centerTitle: true,
         actions: <Widget>[
           FlatButton(
@@ -95,42 +89,44 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
             child: Column(children: [
               Icon(Icons.person, size: 100, color: Colors.white),
               SizedBox(height: 5),
-              Text('Kunde',
+              Text(widget.nameController.text,
                   style: TextStyle(fontSize: 20, color: Colors.white)),
-              SizedBox(height: 10),
+              SizedBox(height: 15),
             ]),
           ),
-          Expanded(
-            child: ListView(
-              children: [
-                _createSpaceBox(),
-                _createContactCard(
-                  Column(
-                    children: [
-                      _buildCompany(),
-                      _buildContact(),
-                      _buildLocation(),
-                    ],
+          Container(
+            child: Expanded(
+              child: ListView(
+                children: [
+                  _createSpaceBox(),
+                  _createContactCard(
+                    Column(
+                      children: [
+                        _buildCompany(),
+                        _buildContact(),
+                        _buildLocation(),
+                      ],
+                    ),
                   ),
-                ),
-                _createSpaceBox(),
-                _createContactCard(
-                  Column(
-                    children: [
-                      _buildPhone(),
-                    ],
+                  _createSpaceBox(),
+                  _createContactCard(
+                    Column(
+                      children: [
+                        _buildPhone(),
+                      ],
+                    ),
                   ),
-                ),
-                _createSpaceBox(),
-                _createContactCard(
-                  Column(
-                    children: [
-                      _buildEmail(),
-                      _buildWeb(),
-                    ],
+                  _createSpaceBox(),
+                  _createContactCard(
+                    Column(
+                      children: [
+                        _buildEmail(),
+                        _buildWeb(),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
@@ -375,17 +371,17 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
   }
 
   Widget _createSpaceBox() {
-    return SizedBox(height: 20);
+    return SizedBox(height: 10);
   }
 
   Widget _createContactCard(Widget child) {
     return Card(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(0.0),
       ),
-      elevation: 5,
-      margin: EdgeInsets.only(left: 15, right: 15),
+      elevation: 2,
+      margin: EdgeInsets.only(left: 10, right: 10),
       child: Padding(
         padding: EdgeInsets.only(top: 5, bottom: 25),
         child: child,
