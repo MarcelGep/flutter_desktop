@@ -9,9 +9,7 @@ import '../database/database_helper.dart';
 import '../models/customer.dart';
 
 class CustomerList extends StatelessWidget {
-  const CustomerList({
-    Key key,
-  }) : super(key: key);
+  const CustomerList({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

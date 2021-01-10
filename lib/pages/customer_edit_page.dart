@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/database_helper.dart';
 import 'package:flutter_desktop/models/customer.dart';
+import 'package:flutter_desktop/widgets/customer_list.dart';
 
 // ignore: must_be_immutable
 class CustomerEditPage extends StatefulWidget {
@@ -28,7 +29,6 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
   bool _validated = true;
   bool _editCustomer = false;
   Customer _customer;
-  double _space = 25;
 
   void initCustomerData() {
     _customer = ModalRoute.of(context).settings.arguments;
@@ -57,15 +57,16 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
     initCustomerData();
     return new Scaffold(
       appBar: AppBar(
+        elevation: 0,
         leadingWidth: 123,
         leading: FlatButton(
           onPressed: () => Navigator.pop(context),
           child: Row(
             children: [
-              Icon(Icons.arrow_back_ios, size: 24, color: Colors.black87),
+              Icon(Icons.arrow_back_ios, size: 24, color: Colors.grey[850]),
               Text(
                 'Kunden',
-                style: TextStyle(fontSize: 18, color: Colors.black87),
+                style: TextStyle(fontSize: 18, color: Colors.grey[850]),
               ),
             ],
           ),
@@ -73,7 +74,7 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
         title: Icon(
           _editCustomer ? Icons.mode_outlined : Icons.person_add,
           size: 35,
-          color: Colors.black87,
+          color: Colors.grey[850],
         ),
         centerTitle: true,
         actions: <Widget>[
@@ -81,25 +82,30 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
             onPressed: () => applyCustomer(),
             child: Text(
               _editCustomer ? 'Speichern' : 'Erstellen',
-              style: TextStyle(color: Colors.black87, fontSize: 18),
+              style: TextStyle(color: Colors.grey[850], fontSize: 18),
             ),
           )
         ],
       ),
-      body: Container(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Card(
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 5,
-                margin: EdgeInsets.only(top: 20, left: 20, right: 20),
-                child: Padding(
-                  padding: EdgeInsets.only(top: 10, bottom: 25),
-                  child: Column(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            decoration: BoxDecoration(color: Colors.lightBlue),
+            child: Column(children: [
+              Icon(Icons.person, size: 100, color: Colors.white),
+              SizedBox(height: 5),
+              Text('Kunde',
+                  style: TextStyle(fontSize: 20, color: Colors.white)),
+              SizedBox(height: 10),
+            ]),
+          ),
+          Expanded(
+            child: ListView(
+              children: [
+                _createSpaceBox(),
+                _createContactCard(
+                  Column(
                     children: [
                       _buildCompany(),
                       _buildContact(),
@@ -107,29 +113,27 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
                     ],
                   ),
                 ),
-              ),
-              SizedBox(height: 15),
-              Card(
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 5,
-                margin: EdgeInsets.only(top: 10, left: 20, right: 20),
-                child: Padding(
-                  padding: EdgeInsets.only(top: 10, bottom: 25),
-                  child: Column(
+                _createSpaceBox(),
+                _createContactCard(
+                  Column(
                     children: [
                       _buildPhone(),
+                    ],
+                  ),
+                ),
+                _createSpaceBox(),
+                _createContactCard(
+                  Column(
+                    children: [
                       _buildEmail(),
                       _buildWeb(),
                     ],
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -138,10 +142,10 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
     return Form(
       key: _formKeyName,
       child: Container(
-        padding: EdgeInsets.only(left: 10, right: 30, bottom: _space),
+        padding: EdgeInsets.only(left: 10, right: 30),
         child: Row(
           children: [
-            Icon(Icons.home_work, color: Colors.blue[500]),
+            Icon(Icons.home_work, color: Colors.blue),
             SizedBox(width: 20),
             Expanded(
               child: TextFormField(
@@ -171,7 +175,7 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
 
   Widget _buildContact() {
     return Container(
-      padding: EdgeInsets.only(left: 10, right: 30, bottom: _space),
+      padding: EdgeInsets.only(left: 10, right: 30),
       child: Row(
         children: [
           Icon(Icons.perm_contact_cal, color: Colors.blue[500]),
@@ -235,7 +239,7 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
 
   Widget _buildPhone() {
     return Container(
-      padding: EdgeInsets.only(left: 10, right: 30, bottom: _space),
+      padding: EdgeInsets.only(left: 10, right: 30),
       child: Form(
         key: _formKeyPhone,
         child: Column(
@@ -286,7 +290,7 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
 
   Widget _buildEmail() {
     return Container(
-      padding: EdgeInsets.only(left: 10, right: 30, bottom: _space),
+      padding: EdgeInsets.only(left: 10, right: 30),
       child: Form(
         key: _formKeyEmail,
         child: Row(
@@ -368,5 +372,24 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
     return RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(value);
+  }
+
+  Widget _createSpaceBox() {
+    return SizedBox(height: 20);
+  }
+
+  Widget _createContactCard(Widget child) {
+    return Card(
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      elevation: 5,
+      margin: EdgeInsets.only(left: 15, right: 15),
+      child: Padding(
+        padding: EdgeInsets.only(top: 5, bottom: 25),
+        child: child,
+      ),
+    );
   }
 }

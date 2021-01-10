@@ -5,9 +5,7 @@ import 'package:flutter_desktop/routes/routes.dart';
 import 'user_info_widget.dart';
 
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({
-    Key key,
-  }) : super(key: key);
+  const AppDrawer({Key key}) : super(key: key);
 
   Widget _createDrawerItem(
       {IconData icon, String text, GestureTapCallback onTap}) {
