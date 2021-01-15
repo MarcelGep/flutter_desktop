@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/database_helper.dart';
 import 'package:flutter_desktop/models/customer.dart';
-import 'package:flutter_desktop/widgets/customer_list.dart';
 
 // ignore: must_be_immutable
-class CustomerEditPage extends StatefulWidget {
-  static const String routeName = '/customerEditPage';
+class CustomerDetailPage extends StatefulWidget {
+  static const String routeName = '/customerDetailPage';
 
   TextEditingController nameController;
   TextEditingController contactController;
@@ -18,10 +17,10 @@ class CustomerEditPage extends StatefulWidget {
   TextEditingController webController;
 
   @override
-  _CustomerEditPageState createState() => _CustomerEditPageState();
+  _CustomerDetailPageState createState() => _CustomerDetailPageState();
 }
 
-class _CustomerEditPageState extends State<CustomerEditPage> {
+class _CustomerDetailPageState extends State<CustomerDetailPage> {
   final _formKeyName = GlobalKey<FormState>();
   final _formKeyPhone = GlobalKey<FormState>();
   final _formKeyEmail = GlobalKey<FormState>();
@@ -71,11 +70,6 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
             ],
           ),
         ),
-        title: Icon(
-          _editCustomer ? Icons.mode_outlined : Icons.person_add,
-          size: 35,
-          color: Colors.grey[850],
-        ),
         centerTitle: true,
         actions: <Widget>[
           FlatButton(
@@ -87,55 +81,62 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
           )
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            decoration: BoxDecoration(color: Colors.lightBlue),
-            child: Column(children: [
-              Icon(Icons.person, size: 100, color: Colors.white),
-              SizedBox(height: 5),
-              Text('Kunde',
-                  style: TextStyle(fontSize: 20, color: Colors.white)),
-              SizedBox(height: 10),
-            ]),
-          ),
-          Expanded(
-            child: ListView(
-              children: [
-                _createSpaceBox(),
-                _createContactCard(
-                  Column(
-                    children: [
-                      _buildCompany(),
-                      _buildContact(),
-                      _buildLocation(),
-                    ],
+      body: Container(
+        decoration: BoxDecoration(color: Colors.grey[200]),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              decoration: BoxDecoration(color: Colors.lightBlue),
+              child: Column(
+                children: [
+                  Icon(
+                    _editCustomer ? Icons.person : Icons.person_add,
+                    size: 100,
+                    color: Colors.white,
                   ),
-                ),
-                _createSpaceBox(),
-                _createContactCard(
-                  Column(
-                    children: [
-                      _buildPhone(),
-                    ],
+                  Text(
+                    _editCustomer ? _customer.name : "Kunde anlegen",
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600),
                   ),
-                ),
-                _createSpaceBox(),
-                _createContactCard(
-                  Column(
-                    children: [
-                      _buildEmail(),
-                      _buildWeb(),
-                    ],
-                  ),
-                ),
-              ],
+                  SizedBox(height: 20),
+                ],
+              ),
             ),
-          ),
-        ],
+            Expanded(
+              child: ListView(
+                padding:
+                    EdgeInsets.only(top: 5, bottom: 50, left: 10, right: 10),
+                children: [
+                  _buildCompany(),
+                  _createSpaceBox(),
+                  _buildContact(),
+                  _createSpaceBox(),
+                  _buildLocation(),
+                  _createSpaceBox(),
+                  _buildPhone(),
+                  _createSpaceBox(),
+                  _buildEmail(),
+                  _createSpaceBox(),
+                  _buildWeb(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  TextStyle _textFieldStyle() {
+    return TextStyle(fontWeight: FontWeight.w500);
+  }
+
+  TextStyle _textFieldLabelStyle() {
+    return TextStyle(fontSize: 15, fontWeight: FontWeight.w400);
   }
 
   Widget _buildCompany() {
@@ -152,10 +153,9 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
                 controller: widget.nameController,
                 decoration: InputDecoration(
                   labelText: 'Firma',
-                  labelStyle:
-                      TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                  labelStyle: _textFieldLabelStyle(),
                 ),
-                style: TextStyle(fontWeight: FontWeight.w600),
+                style: _textFieldStyle(),
                 onChanged: (value) => _formKeyName.currentState.validate(),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -184,7 +184,11 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
             child: TextFormField(
               keyboardType: TextInputType.streetAddress,
               controller: widget.contactController,
-              decoration: InputDecoration(labelText: 'Kontakt'),
+              decoration: InputDecoration(
+                labelText: 'Kontakt',
+                labelStyle: _textFieldLabelStyle(),
+              ),
+              style: _textFieldStyle(),
             ),
           ),
         ],
@@ -205,11 +209,16 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
                 child: TextFormField(
                   keyboardType: TextInputType.streetAddress,
                   controller: widget.streetController,
-                  decoration: InputDecoration(labelText: 'Straße'),
+                  decoration: InputDecoration(
+                    labelText: 'Straße',
+                    labelStyle: _textFieldLabelStyle(),
+                  ),
+                  style: _textFieldStyle(),
                 ),
               ),
             ],
           ),
+          SizedBox(height: 5),
           Row(
             children: [
               SizedBox(width: 45),
@@ -217,8 +226,12 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
                 child: TextFormField(
                   keyboardType: TextInputType.number,
                   maxLength: 5,
-                  decoration:
-                      InputDecoration(counterText: '', labelText: 'PLZ'),
+                  decoration: InputDecoration(
+                    counterText: '',
+                    labelText: 'PLZ',
+                    labelStyle: _textFieldLabelStyle(),
+                  ),
+                  style: _textFieldStyle(),
                   controller: widget.zipController,
                 ),
               ),
@@ -227,7 +240,11 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
                 flex: 3,
                 child: TextFormField(
                   controller: widget.locationController,
-                  decoration: InputDecoration(labelText: 'Ort'),
+                  decoration: InputDecoration(
+                    labelText: 'Ort',
+                    labelStyle: _textFieldLabelStyle(),
+                  ),
+                  style: _textFieldStyle(),
                 ),
               ),
             ],
@@ -252,8 +269,12 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
                   child: TextFormField(
                     keyboardType: TextInputType.phone,
                     maxLength: 15,
-                    decoration:
-                        InputDecoration(counterText: '', labelText: 'Telefon'),
+                    decoration: InputDecoration(
+                      counterText: '',
+                      labelText: 'Telefon',
+                      labelStyle: _textFieldLabelStyle(),
+                    ),
+                    style: _textFieldStyle(),
                     controller: widget.phoneController,
                     onChanged: (value) => _formKeyPhone.currentState.validate(),
                     validator: (value) {
@@ -268,6 +289,7 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
                 ),
               ],
             ),
+            SizedBox(height: 5),
             Row(
               children: [
                 SizedBox(width: 45),
@@ -276,8 +298,12 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
                     keyboardType: TextInputType.phone,
                     maxLength: 15,
                     controller: widget.faxController,
-                    decoration:
-                        InputDecoration(counterText: '', labelText: 'Fax'),
+                    decoration: InputDecoration(
+                      counterText: '',
+                      labelText: 'Fax',
+                      labelStyle: _textFieldLabelStyle(),
+                    ),
+                    style: _textFieldStyle(),
                   ),
                 ),
               ],
@@ -301,7 +327,11 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
               child: TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 controller: widget.emailController,
-                decoration: InputDecoration(labelText: 'E-Mail'),
+                decoration: InputDecoration(
+                  labelText: 'E-Mail',
+                  labelStyle: _textFieldLabelStyle(),
+                ),
+                style: _textFieldStyle(),
                 onTap: () => _formKeyEmail.currentState.reset(),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -336,7 +366,11 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
             child: TextFormField(
               keyboardType: TextInputType.url,
               controller: widget.webController,
-              decoration: InputDecoration(labelText: 'Website'),
+              decoration: InputDecoration(
+                labelText: 'Website',
+                labelStyle: _textFieldLabelStyle(),
+              ),
+              style: _textFieldStyle(),
             ),
           ),
         ],
@@ -375,17 +409,17 @@ class _CustomerEditPageState extends State<CustomerEditPage> {
   }
 
   Widget _createSpaceBox() {
-    return SizedBox(height: 20);
+    return SizedBox(height: 25);
   }
 
   Widget _createContactCard(Widget child) {
     return Card(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(0.0),
       ),
-      elevation: 5,
-      margin: EdgeInsets.only(left: 15, right: 15),
+      elevation: 1,
+      margin: EdgeInsets.only(left: 0, right: 0),
       child: Padding(
         padding: EdgeInsets.only(top: 5, bottom: 25),
         child: child,

@@ -32,7 +32,7 @@ class CustomerList extends StatelessWidget {
             return Container(
               child: ListView.builder(
                 itemCount: snapshot.data.length,
-                padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                padding: const EdgeInsets.only(top: 5, bottom: 30),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
@@ -120,8 +120,13 @@ class CustomerList extends StatelessWidget {
                         subtitle: Text(
                           customer.email,
                         ),
-                        onTap: () => DialogsHelper.openCustomerInfoDialog(
-                            context, customer),
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            Routes.customerEdit,
+                            arguments: customer,
+                          );
+                        },
                       ),
                     ),
                     actions: <Widget>[
