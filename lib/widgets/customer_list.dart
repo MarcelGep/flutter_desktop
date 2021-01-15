@@ -103,7 +103,7 @@ class CustomerList extends StatelessWidget {
                                 //Edit button
                                 Navigator.pushNamed(
                                   context,
-                                  Routes.customerEdit,
+                                  Routes.customerDetail,
                                   arguments: customer,
                                 );
                                 break;
@@ -123,7 +123,7 @@ class CustomerList extends StatelessWidget {
                         onTap: () {
                           Navigator.pushNamed(
                             context,
-                            Routes.customerEdit,
+                            Routes.customerDetail,
                             arguments: customer,
                           );
                         },
@@ -147,7 +147,7 @@ class CustomerList extends StatelessWidget {
                         onTap: () {
                           Navigator.pushNamed(
                             context,
-                            Routes.customerEdit,
+                            Routes.customerDetail,
                             arguments: customer,
                           );
                         },
