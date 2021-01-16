@@ -3,13 +3,8 @@ import 'package:flutter_desktop/database/database_helper.dart';
 import 'package:flutter_desktop/models/customer.dart';
 
 // ignore: must_be_immutable
-<<<<<<< HEAD:lib/pages/customer_detail_page.dart
 class CustomerDetailPage extends StatefulWidget {
   static const String routeName = '/customerDetailPage';
-=======
-class CustomerInfoPage extends StatefulWidget {
-  static const String routeName = '/customerInfoPage';
->>>>>>> development:lib/pages/customer_info_page.dart
 
   TextEditingController nameController;
   TextEditingController contactController;
@@ -22,17 +17,10 @@ class CustomerInfoPage extends StatefulWidget {
   TextEditingController webController;
 
   @override
-<<<<<<< HEAD:lib/pages/customer_detail_page.dart
   _CustomerDetailPageState createState() => _CustomerDetailPageState();
 }
 
 class _CustomerDetailPageState extends State<CustomerDetailPage> {
-=======
-  _CustomerInfoPageState createState() => _CustomerInfoPageState();
-}
-
-class _CustomerInfoPageState extends State<CustomerInfoPage> {
->>>>>>> development:lib/pages/customer_info_page.dart
   final _formKeyName = GlobalKey<FormState>();
   final _formKeyPhone = GlobalKey<FormState>();
   final _formKeyEmail = GlobalKey<FormState>();
@@ -93,7 +81,6 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
           )
         ],
       ),
-<<<<<<< HEAD:lib/pages/customer_detail_page.dart
       body: Container(
         decoration: BoxDecoration(color: Colors.grey[200]),
         child: Column(
@@ -116,52 +103,6 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
                         fontWeight: FontWeight.w600),
                   ),
                   SizedBox(height: 20),
-=======
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            decoration: BoxDecoration(color: Colors.lightBlue),
-            child: Column(children: [
-              Icon(Icons.person, size: 100, color: Colors.white),
-              SizedBox(height: 5),
-              Text(widget.nameController.text,
-                  style: TextStyle(fontSize: 20, color: Colors.white)),
-              SizedBox(height: 15),
-            ]),
-          ),
-          Container(
-            child: Expanded(
-              child: ListView(
-                children: [
-                  _createSpaceBox(),
-                  _createContactCard(
-                    Column(
-                      children: [
-                        _buildCompany(),
-                        _buildContact(),
-                        _buildLocation(),
-                      ],
-                    ),
-                  ),
-                  _createSpaceBox(),
-                  _createContactCard(
-                    Column(
-                      children: [
-                        _buildPhone(),
-                      ],
-                    ),
-                  ),
-                  _createSpaceBox(),
-                  _createContactCard(
-                    Column(
-                      children: [
-                        _buildEmail(),
-                        _buildWeb(),
-                      ],
-                    ),
-                  ),
->>>>>>> development:lib/pages/customer_info_page.dart
                 ],
               ),
             ),
@@ -468,11 +409,7 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
   }
 
   Widget _createSpaceBox() {
-<<<<<<< HEAD:lib/pages/customer_detail_page.dart
     return SizedBox(height: 25);
-=======
-    return SizedBox(height: 10);
->>>>>>> development:lib/pages/customer_info_page.dart
   }
 
   Widget _createContactCard(Widget child) {
@@ -481,13 +418,8 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(0.0),
       ),
-<<<<<<< HEAD:lib/pages/customer_detail_page.dart
       elevation: 1,
       margin: EdgeInsets.only(left: 0, right: 0),
-=======
-      elevation: 2,
-      margin: EdgeInsets.only(left: 10, right: 10),
->>>>>>> development:lib/pages/customer_info_page.dart
       child: Padding(
         padding: EdgeInsets.only(top: 5, bottom: 25),
         child: child,
