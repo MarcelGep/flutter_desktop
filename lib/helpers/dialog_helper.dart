@@ -1,6 +1,5 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_desktop/dialogs/customer_info_dialog.dart';
 import 'package:flutter_desktop/widgets/TextCounter.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -8,17 +7,6 @@ import '../models/customer.dart';
 import '../database/database_helper.dart';
 
 class DialogsHelper {
-  static void openCustomerInfoDialog(BuildContext context, Customer customer) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CustomerInfoDialog(customer: customer);
-      },
-    );
-  }
-
-  void startTimer() {}
-
   static void showDeleteFlushbar(
       BuildContext context, Customer customer, int durationMs) {
     Flushbar<List<String>> flush;
