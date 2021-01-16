@@ -1,3 +1,4 @@
+import 'package:flutter_desktop/pages/article_detail_page.dart';
 import 'package:flutter_desktop/pages/customer_detail_page.dart';
 import 'package:flutter_desktop/pages/article_page.dart';
 import 'package:flutter_desktop/pages/customer_page.dart';
@@ -14,4 +15,5 @@ class Routes {
   static const String articles = ArticlePage.routeName;
   static const String settings = SettingsPage.routeName;
   static const String customerDetail = CustomerDetailPage.routeName;
+  static const String articleDetail = ArticleDetailPage.routeName;
 }

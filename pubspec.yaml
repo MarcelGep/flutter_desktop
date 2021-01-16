@@ -44,6 +44,8 @@ dependencies:
   sign_in_with_apple: ^2.5.4
   rounded_loading_button: ^1.0.0
   multi_select_item: ^1.0.3
+  flutter_masked_text: ^0.8.0
+  direct_select_flutter: ^1.0.7
 
 dev_dependencies:
   flutter_test:

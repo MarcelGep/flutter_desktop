@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
+import 'package:flutter_desktop/pages/article_detail_page.dart';
 import 'package:flutter_desktop/pages/customer_detail_page.dart';
 import 'package:flutter_desktop/pages/login_screen.dart';
 import 'package:flutter_desktop/pages/settings_page.dart';
@@ -44,6 +45,7 @@ class CustomerMaintenanceApp extends StatelessWidget {
           Routes.articles: (context) => ArticlePage(),
           Routes.settings: (context) => SettingsPage(),
           Routes.customerDetail: (context) => CustomerDetailPage(),
+          Routes.articleDetail: (context) => ArticleDetailPage(),
         },
       ),
     );
