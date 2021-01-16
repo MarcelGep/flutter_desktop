@@ -1,4 +1,5 @@
-import 'package:flutter_desktop/pages/customer_info_page.dart';
+import 'package:flutter_desktop/pages/article_detail_page.dart';
+import 'package:flutter_desktop/pages/customer_detail_page.dart';
 import 'package:flutter_desktop/pages/article_page.dart';
 import 'package:flutter_desktop/pages/customer_page.dart';
 import 'package:flutter_desktop/pages/invoice_page.dart';
@@ -13,5 +14,6 @@ class Routes {
   static const String invoices = InvoicePage.routeName;
   static const String articles = ArticlePage.routeName;
   static const String settings = SettingsPage.routeName;
-  static const String customerInfo = CustomerInfoPage.routeName;
+  static const String customerDetail = CustomerDetailPage.routeName;
+  static const String articleDetail = ArticleDetailPage.routeName;
 }

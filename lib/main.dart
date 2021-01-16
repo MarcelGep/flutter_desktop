@@ -2,7 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
-import 'package:flutter_desktop/pages/customer_info_page.dart';
+import 'package:flutter_desktop/pages/article_detail_page.dart';
+import 'package:flutter_desktop/pages/customer_detail_page.dart';
 import 'package:flutter_desktop/pages/login_screen.dart';
 import 'package:flutter_desktop/pages/settings_page.dart';
 import 'package:flutter_desktop/pages/signup_screen.dart';
@@ -43,7 +44,8 @@ class CustomerMaintenanceApp extends StatelessWidget {
           Routes.invoices: (context) => InvoicePage(),
           Routes.articles: (context) => ArticlePage(),
           Routes.settings: (context) => SettingsPage(),
-          Routes.customerInfo: (context) => CustomerInfoPage(),
+          Routes.customerDetail: (context) => CustomerDetailPage(),
+          Routes.articleDetail: (context) => ArticleDetailPage(),
         },
       ),
     );

@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_desktop/database/auth_helper.dart';
+import 'package:flutter_desktop/models/article.dart';
 import 'package:flutter_desktop/models/customer.dart';
 import 'package:flutter_desktop/models/users.dart';
+import 'package:flutter_desktop/widgets/article_list.dart';
 
 class DatabaseHelper {
   static CollectionReference _users =
@@ -29,6 +31,7 @@ class DatabaseHelper {
     return new User.fromJson(userId, snapshot.data());
   }
 
+  // Customers
   static addRandomCustomer() {
     var faker = new Faker();
     Customer newCustomer = new Customer(
@@ -44,6 +47,16 @@ class DatabaseHelper {
         "www." + faker.internet.userName() + ".de");
 
     DatabaseHelper.addCustomer(newCustomer);
+  }
+
+  static Stream<List<Customer>> getCustomerStream() {
+    Query _sortCustomers = _users
+        .doc(AuthHelper.getCurrentUserId())
+        .collection('customers')
+        .orderBy('name', descending: false);
+    Stream<QuerySnapshot> stream = _sortCustomers.snapshots();
+    return stream.map((qShot) =>
+        qShot.docs.map((doc) => Customer.fromMap(doc.data())).toList());
   }
 
   static addCustomer(Customer customer) {
@@ -77,16 +90,6 @@ class DatabaseHelper {
         .catchError((error) => print("Failed to delete customer: $error"));
   }
 
-  static Stream<List<Customer>> getCustomerStream() {
-    Query _sortCustomers = _users
-        .doc(AuthHelper.getCurrentUserId())
-        .collection('customers')
-        .orderBy('name', descending: false);
-    Stream<QuerySnapshot> stream = _sortCustomers.snapshots();
-    return stream.map((qShot) =>
-        qShot.docs.map((doc) => Customer.fromMap(doc.data())).toList());
-  }
-
   static void updateCustomer(Customer customer) {
     _users
         .doc(AuthHelper.getCurrentUserId())
@@ -95,20 +98,48 @@ class DatabaseHelper {
         .update(customer.toMap());
   }
 
-  // static Future<void> readCustomerData() {
-  //   _customers.get().then(
-  //         (QuerySnapshot querySnapshot) => {
-  //           querySnapshot.docs.forEach(
-  //             (doc) {
-  //               print(doc["contact"]);
-  //             },
-  //           )
-  //         },
-  //       );
-  // }
+  // Articles
+  static Stream<List<Article>> getArticleStream() {
+    Query _sortArticles = _users
+        .doc(AuthHelper.getCurrentUserId())
+        .collection('articles')
+        .orderBy('name', descending: false);
+    Stream<QuerySnapshot> stream = _sortArticles.snapshots();
+    return stream.map((qShot) =>
+        qShot.docs.map((doc) => Article.fromMap(doc.data())).toList());
+  }
 
-  // static Future<List<Customer>> getCustomerData() async {
-  //   QuerySnapshot qShot = await _sortCustomers.get();
-  //   return qShot.docs.map((doc) => Customer.fromMap(doc.data())).toList();
-  // }
+  static addArticle(Article article) {
+    DocumentReference articleRef =
+        _users.doc(AuthHelper.getCurrentUserId()).collection('articles').doc();
+
+    Map<String, dynamic> data = {
+      "id": articleRef.id,
+      "name": article.name,
+      "price": article.price,
+      "amount": article.amount,
+      "unit": article.unit
+    };
+
+    articleRef
+        .set(data)
+        .catchError((error) => print("Failed to add article: $error"));
+  }
+
+  static deleteArticle(Article article) {
+    _users
+        .doc(AuthHelper.getCurrentUserId())
+        .collection('articles')
+        .doc(article.id)
+        .delete()
+        .catchError((error) => print("Failed to delete article: $error"));
+  }
+
+  static void updateArticle(Article article) {
+    _users
+        .doc(AuthHelper.getCurrentUserId())
+        .collection('articles')
+        .doc(article.id)
+        .update(article.toMap());
+  }
 }
