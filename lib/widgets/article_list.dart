@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/database_helper.dart';
+import 'package:flutter_desktop/helpers/dialog_helper.dart';
 import 'package:flutter_desktop/helpers/formatter.dart';
 import 'package:flutter_desktop/models/article.dart';
 import 'package:flutter_desktop/routes/routes.dart';
@@ -60,16 +61,6 @@ class ArticleList extends StatelessWidget {
                               value: 1,
                               child: Row(
                                 children: [
-                                  Icon(Icons.edit, color: Colors.black45),
-                                  SizedBox(width: 8),
-                                  Text('Bearbeiten'),
-                                ],
-                              ),
-                            ),
-                            PopupMenuItem(
-                              value: 2,
-                              child: Row(
-                                children: [
                                   Icon(Icons.delete, color: Colors.red),
                                   SizedBox(width: 8),
                                   Text('Löschen'),
@@ -82,8 +73,8 @@ class ArticleList extends StatelessWidget {
                               case 1:
                                 //Delete button
                                 DatabaseHelper.deleteArticle(article);
-                                // DialogsHelper.showDeleteFlushbar(
-                                //     context, article, 2000);
+                                DialogsHelper.showArticleDeleteFlushbar(
+                                    context, article, 2000);
                                 break;
                             }
                           },
@@ -108,8 +99,8 @@ class ArticleList extends StatelessWidget {
                         icon: Icons.delete,
                         onTap: () {
                           DatabaseHelper.deleteArticle(article);
-                          // DialogsHelper.showDeleteFlushbar(
-                          //     context, customer, 2000);
+                          DialogsHelper.showArticleDeleteFlushbar(
+                              context, article, 2000);
                         },
                       ),
                     ],

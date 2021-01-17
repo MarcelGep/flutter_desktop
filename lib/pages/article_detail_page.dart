@@ -1,4 +1,3 @@
-import 'package:direct_select_flutter/direct_select_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_desktop/database/database_helper.dart';
 import 'package:flutter_desktop/helpers/formatter.dart';
@@ -21,7 +20,8 @@ class ArticleDetailPage extends StatefulWidget {
 class _ArticleDetailPageState extends State<ArticleDetailPage> {
   final _formKeyName = GlobalKey<FormState>();
   final _formKeyUnit = GlobalKey<FormState>();
-  // final _formKeyEmail = GlobalKey<FormState>();
+  final _formKeyPrice = GlobalKey<FormState>();
+  final _formKeyAmount = GlobalKey<FormState>();
 
   bool _validated = true;
   bool _editArticle = false;
@@ -84,7 +84,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
               child: Column(
                 children: [
                   Icon(
-                    _editArticle ? Icons.person : Icons.person_add,
+                    _editArticle ? Icons.article_outlined : Icons.post_add,
                     size: 100,
                     color: Colors.white,
                   ),
@@ -104,6 +104,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                 padding:
                     EdgeInsets.only(top: 5, bottom: 50, left: 10, right: 10),
                 children: [
+                  SizedBox(height: 15),
                   _buildName(),
                   _createSpaceBox(),
                   _buildPrice(),
@@ -164,47 +165,72 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   }
 
   Widget _buildPrice() {
-    return Container(
-      padding: EdgeInsets.only(left: 10, right: 30),
-      child: Row(
-        children: [
-          Icon(Icons.attach_money, color: Colors.blue[500]),
-          SizedBox(width: 20),
-          Expanded(
-            child: TextFormField(
-              keyboardType: TextInputType.streetAddress,
-              controller: widget.priceController,
-              decoration: InputDecoration(
-                labelText: 'Preis',
-                labelStyle: _textFieldLabelStyle(),
+    return Form(
+      key: _formKeyPrice,
+      child: Container(
+        padding: EdgeInsets.only(left: 10, right: 30),
+        child: Row(
+          children: [
+            Icon(Icons.attach_money, color: Colors.blue[500]),
+            SizedBox(width: 20),
+            Expanded(
+              child: TextFormField(
+                keyboardType: TextInputType.streetAddress,
+                controller: widget.priceController,
+                decoration: InputDecoration(
+                  labelText: 'Preis',
+                  labelStyle: _textFieldLabelStyle(),
+                ),
+                style: _textFieldStyle(),
+                validator: (value) {
+                  double price =
+                      Formatter.createDoubleFromCurrencyString(value);
+                  if (price <= 0.00) {
+                    _validated = false;
+                    return 'Preis muss über 0,00 € sein';
+                  }
+                  _validated = true;
+                  return null;
+                },
               ),
-              style: _textFieldStyle(),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildAmount() {
-    return Container(
-      padding: EdgeInsets.only(left: 10, right: 30),
-      child: Row(
-        children: [
-          Icon(Icons.format_list_numbered, color: Colors.blue[500]),
-          SizedBox(width: 20),
-          Expanded(
-            child: TextFormField(
-              keyboardType: TextInputType.number,
-              controller: widget.amountController,
-              decoration: InputDecoration(
-                labelText: 'Menge',
-                labelStyle: _textFieldLabelStyle(),
+    return Form(
+      key: _formKeyAmount,
+      child: Container(
+        padding: EdgeInsets.only(left: 10, right: 30),
+        child: Row(
+          children: [
+            Icon(Icons.format_list_numbered, color: Colors.blue[500]),
+            SizedBox(width: 20),
+            Expanded(
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                controller: widget.amountController,
+                decoration: InputDecoration(
+                  labelText: 'Menge',
+                  labelStyle: _textFieldLabelStyle(),
+                ),
+                style: _textFieldStyle(),
+                validator: (value) {
+                  int price = int.parse(value);
+                  if (price <= 0) {
+                    _validated = false;
+                    return 'Menge muss min. 1 betragen';
+                  }
+                  _validated = true;
+                  return null;
+                },
               ),
-              style: _textFieldStyle(),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -224,7 +250,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
     return Form(
       key: _formKeyUnit,
       child: Container(
-        padding: EdgeInsets.only(left: 10, right: 30),
+        padding: EdgeInsets.only(top: 5, left: 10, right: 30),
         child: Row(
           children: [
             Icon(Icons.category, color: Colors.blue[500]),
@@ -264,8 +290,9 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
 
   void applyArticle() {
     if (_formKeyName.currentState.validate() &&
+        _formKeyPrice.currentState.validate() &&
+        _formKeyAmount.currentState.validate() &&
         _formKeyUnit.currentState.validate() &&
-        // _formKeyEmail.currentState.validate() &&
         _validated) {
       _article.name = widget.nameController.text;
       _article.price =
